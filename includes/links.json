@@ -1,0 +1,15 @@
+{
+  "stylesheet": {
+    "Material Icons": {
+      "href": "http://fonts.googleapis.com/icon?family=Material+Icons"
+    },
+    "Materialize Css": {
+      "href": "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css"
+    },
+    "Css General": {
+      "href": "/css/estilo.css"
+    }
+  },
+  "icon": {
+    "Icono Web":{"href":"/img/favicon.png", "sizes":"192x192"}}
+}

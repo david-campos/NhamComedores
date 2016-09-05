@@ -1,0 +1,5 @@
+[
+  {"async": false, "src": "https://code.jquery.com/jquery-2.1.1.min.js"},
+  {"src": "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"},
+  {"src": "/js/browser_testing.js"}
+]

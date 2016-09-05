@@ -1,0 +1,22 @@
+{
+  "inicio": {
+    "dir": "view_inicio.php"},
+  "404": {
+    "dir": "view_error404.php"},
+  "colaboran": {
+    "dir": "view_colaboran.php"},
+
+  "login": {
+    "dir": "comedores/view_login.php",
+    "if_logged": "panel"},
+
+  "calendario":  {
+    "dir": "comedores/view_calendario.php",
+    "if_not_logged": "login"},
+  "panel": {
+    "dir": "comedores/view_panel.php",
+    "if_not_logged": "login"},
+  "misplatos": {
+    "dir": "comedores/view_misPlatos.php",
+    "if_not_logged": "login"}
+}

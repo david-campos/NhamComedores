@@ -1,0 +1,379 @@
+/*
+ * estilo.css
+ * Hoja de estilos básica general de la página, apenas debe corregir
+ * un par de cosillas pues la mayor parte del diseño recae en la librería
+ * materializecss.
+ *
+ * David Campos Rodríguez
+ * 02/04/2016
+ */
+span.dia {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+span.dia.abierto {
+	color: green;
+}
+
+span.dia.cerrado {
+	color: red;
+}
+
+i.anhadir:hover {
+	color: #4caf50 !important;
+}
+
+.tabs .tab a {
+	color: #ffa000;
+}
+
+.tabs .tab a:hover {
+	color: #ffe082;
+}
+
+.tabs .indicator {
+	background-color: #ffe082;
+}
+
+div#rCalendario {
+	margin-bottom: 0;
+}
+
+table.calendario {
+	border-collapse: separate;
+	border-spacing: 3px;
+}
+
+table.calendario tfoot tr{
+	height: 50px;
+}
+
+table.calendario tfoot div.progress{
+	margin-bottom: 0;
+}
+
+table.calendario th{
+	width: 12%;
+}
+
+table.calendario thead th#calYear{
+	font-size: 2.5em;
+}
+
+table.calendario thead th#calMonth{
+	font-size: 2.0em;
+}
+
+table.calendario thead th.misPlatos {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+table.calendario tbody td.calDia{
+	cursor: pointer;
+	background-color: white;
+    width: 12%;
+	/*border: 1px solid white;*/
+}
+
+table.calendario tbody td.calDia * {
+    pointer-events: none;
+}
+
+table.calendario tbody td.ranuraMisPlatos {
+    width: 16%;
+    max-width: 16%;
+    text-align: left;
+}
+
+table.calendario tbody td.ranuraMisPlatos.iniciada {
+    cursor: move;
+}
+
+table.calendario tbody td.calDia i {
+	height: 0;
+	float: left;
+	margin-top: -12px;
+	display: none;
+}
+
+table.calendario tbody td.calDia i.platos {
+	color: #8bc34a;
+}
+
+table.calendario tbody td.calDia i.tachar {
+	color: #f44336;
+}
+
+table.calendario tbody td.calDia:hover{
+	background-color: lightgray;
+}
+
+table.calendario tbody td.calDia.puedes-dropear {
+    border: 2px dashed #8bc34a;
+    padding: 13px 5px;
+}
+
+table.calendario tbody td.calDia.conPlatos i.platos {
+	display: block;
+}
+
+table.calendario tbody td.calDia.pasado i.tachar {
+	display: block;
+}
+
+table.calendario tbody td.calDia.hoy{
+	color: white;
+	background-color: #8bc34a;
+}
+
+table.calendario tbody td.calDia.hoy.puedes-dropear {
+    border-color: white;
+}
+
+table.calendario td.calDia.hoy:hover{
+	background-color: #689f38;
+}
+
+table.calendario td.calDia.cerrado {
+	background-color: #ffcdd2;
+}
+
+table.calendario td.calDia.cerrado:hover {
+	background-color: #ef9a9a;
+}
+
+table.calendario tbody td.calDia.hoy i.platos {
+	color: white;
+}
+
+table.calendario tbody td.calDia.otroMes{
+	background-color: #DFDFDF;
+	color: #555;
+}
+
+table.calendario tfoot td.misPlatos {
+    text-align: center;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+div.material-tooltip {
+    text-align: left;
+    font-size: 0.9em;
+    max-width: 20%;
+    word-wrap: break-word;
+    color: black;
+}
+
+div.material-tooltip .backdrop {
+    background-color: white;
+}
+
+div.material-tooltip span.title {
+    font-weight: bold;
+    font-size: 1.15em;
+    color: #ffc107;
+    width: 100%;
+    display: inline-block;
+}
+
+div.material-tooltip span.type {
+    font-style: italic;
+    color: #8bc34a;
+    width: 100%;
+    display: inline-block;
+}
+
+div.material-tooltip p {
+    margin: 0;
+}
+
+div.material-tooltip p span {
+    color: grey;
+}
+
+table.tablaMisPlatos tr {
+	transition: color 1s;
+}
+
+ul.lista-de-platos .collapsible-header span.tipo-plato {
+	font-style: italic;
+	margin: 0 1rem 0 -1rem;
+}
+
+ul.lista-de-platos a.secondary-content {
+	display: none;
+}
+
+ul.lista-de-platos .collapsible-header:hover a.secondary-content,
+ul.lista-de-platos li.active a.secondary-content {
+	display: block;
+}
+
+div#acciones>div.acciones-contenido {
+	white-space: nowrap;
+	height: 90px;
+}
+div#acciones div.card {
+	display: inline-block;
+	transition: background-color 1s;
+	margin-left: 1%;
+	width: 24.25%;
+}
+
+div#acciones div.card:first-child {
+	margin-left: 0;
+}
+
+#platos li.dismissable a{
+	display: none;
+}
+
+#platos li.dismissable:hover a{
+	display: inline;
+}
+
+#platos a.addPlato {
+	display: none;
+}
+
+#platos div.active a.addPlato {
+	display: inherit;
+}
+
+#menus {
+	display: none;
+}
+
+#menus li.dismissable .precio a {
+	display: none;
+	margin-left: 20px;
+}
+
+#menus li.dismissable .precio a i {
+	position: relative;
+	top: 7px;
+}
+
+#menus li.dismissable:hover .precio a {
+	display: inline-block;
+}
+
+#menus li.dismissable:hover span.badge{
+	margin-top: -7px;
+}
+
+h6 {
+	font-weight: bold;
+}
+
+body {
+	background-color: #eeeeee;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	overflow-x: hidden;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+ /* Autocompletado */
+ul.autocompletado{
+	position: absolute;
+	top: 33px;
+	background-color: #fff;
+	color: #ffc107;
+	width: 100%;
+	z-index: 999;
+}
+
+ul.autocompletado li{
+	padding: 10px;
+	cursor: pointer;
+}
+
+ul.autocompletado li.selected {
+	background-color: #f5f5f5;
+}
+
+ul.autocompletado li.mio {
+	color: #8bc34a;
+}
+
+ /* Demas cosas */
+div.valign.cargando{
+	display: none;
+}
+
+.error {
+	color: red;
+	font-weight: bold;
+}
+ /* slider dots */
+.slider .indicators .indicator-item.active {
+	background-color: #8bc34a;
+}
+
+ /* label focus color */
+input[type=password]:focus:not([readonly]) + label,
+input[type=text]:focus:not([readonly]) + label,
+textarea.materialize-textarea:focus:not([readonly]) + label {
+ color: #ffa000;
+}
+/* label underline focus color */
+input[type=password]:focus:not([readonly]),
+input[type=text]:focus:not([readonly]),
+textarea.materialize-textarea:focus:not([readonly]){
+ border-bottom: 1px solid #ffa000;
+ box-shadow: 0 1px 0 0 #ffa000;
+}
+
+/* icon prefix focus color */
+.input-field .prefix.active {
+ color: #ffa000;
+}
+
+/* switch focus background & progress bar background*/
+.switch label input[type=checkbox]:checked+.lever,
+.progress {
+   background-color: #ffe082;
+}
+
+/* switch focus color & progress bar color */
+.switch label input[type=checkbox]:checked+.lever:after,
+.progress .indeterminate {
+   background-color: #ffa928;
+}
+
+.dropdown-content li>span {
+	color: #ffc107;
+}
+
+/* checkbox amber */
+[type="checkbox"]:checked + label:before{
+    border-right: 2px solid #ffc107;
+	border-bottom: 2px solid #ffc107;
+}
+
+a.btn {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+i.ajustado {
+	position: relative;
+	display: inline-block;
+	top: 3px;
+	margin-right: 2px;
+	line-height: normal;
+}
