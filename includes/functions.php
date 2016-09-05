@@ -400,6 +400,10 @@ function include_content($paginaActual) {
         include dirname(__FILE__)."/../contenido/".$paginaActual->dir;
 }
 
+function simple_script_include($dir) {
+    script_include(array('src'=>$dir));
+}
+
 /**
  * Escribe la inclusión en html del script indicado
  * @param $script array(src=>string,type=>string,async=>bool,defer=>bool) Los datos del script a incluír
@@ -537,8 +541,9 @@ function obtener($key, $filtro=FILTER_UNSAFE_RAW) {
  * @param null|string $color color for the icon, without -text, i.e. 'amber'
  * @param null|string $background color for the background of the i element, i.e. 'red'
  * @param null|string $size size of the icon (see materializecss), i.e. 'small'
+ * @param null|string $anotherClasses Another classes for the icon
  */
-function printIcon($icon_name, $color = null, $background = null, $size = null)
+function printIcon($icon_name, $color = null, $background = null, $size = null, $anotherClasses = null)
 {
     if ($color) $color = ' ' . $color . '-text';
     else            $color = '';
@@ -546,5 +551,7 @@ function printIcon($icon_name, $color = null, $background = null, $size = null)
     else            $background = '';
     if ($size) $size = ' ' . $size;
     else            $size = '';
-    printf("<i class='material-icons%s%s%s'>%s</i>", $color, $background, $size, $icon_name);
+    if ($anotherClasses !== null) $anotherClasses = ' '.$anotherClasses;
+    else $anotherClasses = '';
+    printf("<i class='material-icons%s%s%s%s'>%s</i>", $color, $background, $size, $anotherClasses, $icon_name);
 }

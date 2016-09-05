@@ -78,3 +78,37 @@ function tienePlato($id_comedor, $fecha, $id_plato) {
         throw new Exception('No se pudo preparar: '.$mysqli->error);
     }
 }
+
+/**
+ * Obtiene los platos servidos el día indicado por el comedor indicado, ordenados por tipo de plato
+ * @param $id_comedor int Id del comedor
+ * @param $fecha string fecha en formato Y-m-d
+ * @return array Array con tres arrays, cada uno con los platos de cada tipo
+ * @throws Exception si no se puede ejecutar la consulta
+ */
+function obtenerPlatosServidos($id_comedor, $fecha) {
+    global $mysqli;
+    if( $stmt = $mysqli->prepare(
+        'SELECT p._id,p.nombre,p.descripcion,p.tipo,t.agotado
+         FROM Platos p JOIN Tener t ON (p._id = t.id_plato)
+         WHERE t.id_comedor=? AND t.fecha=?'
+    ) ) {
+        $stmt->bind_param('is', $id_comedor, $fecha);
+        $stmt->execute();
+        $stmt->bind_result($id, $nombre, $descripcion, $tipo, $agotado);
+        $platos = array(array(), array(), array());
+        while( $stmt->fetch() ) {
+            $platos[substr($tipo,0,1)][] = array(
+                "_id"=>$id,
+                "nombre"=>$nombre,
+                "descripcion"=>$descripcion,
+                "tipo"=>$tipo,
+                "agotado"=>$agotado
+            );
+        }
+        $stmt->close();
+        return $platos;
+    } else {
+        throw new Exception('No se pudo preparar: '.$mysqli->error);
+    }
+}

@@ -231,42 +231,29 @@ div#acciones div.card:first-child {
 	margin-left: 0;
 }
 
-#platos li.dismissable a{
-	display: none;
+#platos li[data-agotado="1"] {
+    color: #f44336;
 }
 
-#platos li.dismissable:hover a{
-	display: inline;
+#platos li[data-agotado="1"] h6:after {
+    content: ' (agotado)';
 }
 
-#platos a.addPlato {
-	display: none;
-}
 
-#platos div.active a.addPlato {
-	display: inherit;
+#menus, #platos {
+    margin-top: 1em !important; /* !important porque la animacion de jQuery trata de cambiarlo */
 }
 
 #menus {
-	display: none;
+    background-color: white;
+    display: none;
 }
 
-#menus li.dismissable .precio a {
-	display: none;
-	margin-left: 20px;
-}
-
-#menus li.dismissable .precio a i {
-	position: relative;
-	top: 7px;
-}
-
-#menus li.dismissable:hover .precio a {
-	display: inline-block;
-}
-
-#menus li.dismissable:hover span.badge{
-	margin-top: -7px;
+#menus span.menu-title {
+    font-style: italic;
+    font-weight: bold;
+    color: #ffc107;
+    margin-right: 1em;
 }
 
 h6 {
@@ -373,7 +360,7 @@ a.btn {
 i.ajustado {
 	position: relative;
 	display: inline-block;
-	top: 3px;
+	top: 4px;
 	margin-right: 2px;
 	line-height: normal;
 }

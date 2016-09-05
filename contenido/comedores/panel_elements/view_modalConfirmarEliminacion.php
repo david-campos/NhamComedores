@@ -10,9 +10,9 @@
         <p id="mdcDescripcionEliminado"></p>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect btn-flat">
+        <a href="#" class="modal-action modal-close waves-effect btn-flat">
             <i class="material-icons prefix red-text ajustado">delete</i>Eliminar
         </a>
-        <a href="#!" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
+        <a href="#" class="modal-action modal-close waves-effect btn-flat">Cancelar</a>
     </div>
 </div>

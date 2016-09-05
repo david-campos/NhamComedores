@@ -4,10 +4,14 @@
  * @author David Campos R.
  */
 
+require_once dirname(__FILE__).'/../../../includes/model/Tener.php';
+
 $icons = array('restaurant_menu', 'restaurant', 'free_breakfast');
 $names = array('Primeros', 'Segundos', 'Postres');
+
+$platos = obtenerPlatosServidos($_SESSION['id_comedor'], date('Y-m-d'));
 ?>
-<ul class="collapsible" data-collapsible="accordion">
+<ul class="collapsible" data-collapsible="expandable">
     <?php
     for ($i = 0; $i < 3; $i++) {
         ?>
@@ -17,7 +21,29 @@ $names = array('Primeros', 'Segundos', 'Postres');
                 <?php echo $names[$i]; ?>
             </div>
             <div class="collapsible-body">
-                <? imprimirPlatos(); ?>
+                <ul class="collection">
+                <?php
+                for($j=0; $j<count($platos[$i]); $j++) {
+                    $plato = $platos[$i][$j];
+                    ?>
+                     <li class="collection-item" data-agotado='<?php echo $plato['agotado']; ?>'>
+                         <h6 class='nombre'> <?php echo $plato['nombre']; ?> </h6>
+                         <span class='descripcion'><?php  echo $plato['descripcion']; ?></span>
+                     </li>
+                    <?php
+                }
+                if(count($platos[$i]) == 0) {
+                    ?>
+                    <ul class="collection">
+                        <li class="collection-item">
+                            <?php printIcon('priority_high', 'red', null, null, 'left'); ?>
+                            No sirve usted ningún plato de este tipo hoy.
+                        </li>
+                    </ul>
+                    <?php
+                }
+                ?>
+                </ul>
             </div>
         </li>
         <?php

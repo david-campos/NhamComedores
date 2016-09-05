@@ -4,9 +4,39 @@
  *
  * David Campos Rodríguez
  */
- 
- var platos;
- var menus;
+var platos;
+var menus;
+
+$(document).ready(function(){
+    // Al hacer click en el tab de platos, se muestran los platos y se ocultan los menus
+        $("#platos_tab").click(function(){
+            if(! $("#platos_tab").hasClass("active") ) {
+                $("#menus").slideUp("fast", function() {
+                    $("#platos").delay(100).slideDown("fast");
+                });
+            }
+        });
+
+    // Al hacer click en el tab de menus, se muestran los menus y se ocultan los platos
+        $("#menus_tab").click(function(){
+            if(! $("#menus_tab").hasClass("active") ) {
+                $("#platos").slideUp("fast", function(){
+                    $("#menus").delay(100).slideDown("fast");
+                });
+            }
+        });
+
+// 	$("#platos  li.dismissable a.dismisser").click(eliminarLi);
+// 	$("#menus li.dismissable a.dismisser").click(eliminarLi);
+//
+// 	$("a.modBtnEliminar").click(function(){ $(this).closest(".modal").attr("result", "eliminar");});
+// 	$("a.modBtnCancelar").click(function(){ $(this).closest(".modal").attr("result", "cancelar");});
+//
+// 	setTimeout(comprobarPlatosMenus, 1000);
+// 	platos = $("#platos li.dismissable");
+// 	menus = $("#menus li.dismissable");
+});
+
 
 // Los elementos generados dinámicamente, dejan de ser deslizables (por desgracia)
 //por lo que empleamos esta función para reaplicar las transiciones.
@@ -21,8 +51,7 @@ function hacerDeslizable($this){
 			var x = e.gesture.deltaX;
 			var velocityX = e.gesture.velocityX;
 
-			$this.velocity({ translateX: x},
-				{duration: 50, queue: false, easing: 'easeOutQuad'});
+			$this.velocity({ translateX: x}, {duration: 50, queue: false, easing: 'easeOutQuad'});
 
 			// Swipe Left
 			if (direction === 4 && (x > ($this.innerWidth() / 2) || velocityX < -0.75)) {
@@ -72,24 +101,6 @@ function hacerDeslizable($this){
 		}
 	});
 }
-
-// Al hacer click en el tab de platos, se muestran los platos y se ocultan los menus
-$("#platos_tab").click(function(){
-	if(! $("#platos_tab").hasClass("active") ) {
-		$("#menus").slideUp("fast", function() {
-			$("#platos").slideDown("fast");
-		});
-	}
-});
-
-// Al hacer click en el tab de menus, se muestran los menus y se ocultan los platos
-$("#menus_tab").click(function(){
-	if(! $("#menus_tab").hasClass("active") ) {
-		$("#platos").slideUp("fast", function(){
-			$("#menus").slideDown("fast");
-		});
-	}
-});
 
 // Elimina un elemento, se llama al hacer click en el icono correspondiente
 function eliminarLi(){
@@ -211,67 +222,3 @@ function comprobarPlatosMenus() {
 		}
 	}
 }
-
-$(document).ready(function(){	
-	$("#platos  li.dismissable a.dismisser").click(eliminarLi);
-	$("#menus li.dismissable a.dismisser").click(eliminarLi);
-
-	$("a.modBtnEliminar").click(function(){ $(this).closest(".modal").attr("result", "eliminar");});
-	$("a.modBtnCancelar").click(function(){ $(this).closest(".modal").attr("result", "cancelar");});
-	 
-	setTimeout(comprobarPlatosMenus, 1000);
-	platos = $("#platos li.dismissable");
-	menus = $("#menus li.dismissable");
-	
-	// Añadir un plato
-	$(".addPlato").click( function(event) {
-		event.stopPropagation();
-		
-		// Decidimos el tipo, segun la clase que tenga el boton
-		var tipo = 0;
-		if ( $(this).hasClass("segundo") ){
-			tipo = 1;
-		} else if ( $(this).hasClass("postre") ){
-			tipo = 2;
-		}
-		
-		// Buscamos el pos necesario para colocarlo al final.
-		//El atributo pos se emplea cuando el elemento eliminado
-		//no debía haber sido eliminado, y necesita recolocarse en su sitio.
-		var pos=0;
-		$("#platos"+tipo).children().each( function(index, elemento) {
-			if($(this).attr("pos") > pos)
-				pos = parseInt($(this).attr("pos")) + 1;
-		});
-		
-		// Vaciamos el modal y lo abrimos
-		$("#nombreNuevo").val("");
-		$("#descripcionNuevo").val("");
-		$("#modAdd").attr("result", "añadir");
-		$("#modAdd").openModal({
-			dismissible: false,
-			complete: function() {
-				if( $("#modAdd").attr("result") != "cancelar" ) {
-					var nombre = $("#nombreNuevo").val();
-					var descripcion = $("#descripcionNuevo").val();
-					if ( nombre && nombre.trim() && descripcion && descripcion.trim() ) {
-						$.post("/mysql/view_insertarPlato.php",
-							{'nombre': nombre,'descripcion': descripcion,'tipo':tipo},
-							function(data){
-								var id = data;
-								// TODO: si se ha insertado correctamente, colocar
-								// el id adecuado, si no, avisar!
-								alert(id);
-								var nuevoLi = $("<li class='collection-item dismissable green' platoId='"+id+"' tipo='"+tipo+"' pos='"+pos+"'>"+
-												 '<a href="#" class="secondary-content dismisser"><i class="material-icons amber-text small">delete_forever</i></a>'+
-												 "<h6 class='nombre'>"+nombre+"</h6><span class='descripcion'>"+descripcion+"</span></li>");
-								hacerDeslizable(nuevoLi);
-								nuevoLi.find("a.dismisser").click(eliminarLi);
-								$("ul#platos"+tipo).append(nuevoLi);
-							});
-					}
-				}
-			}
-		});
-	});
-});
