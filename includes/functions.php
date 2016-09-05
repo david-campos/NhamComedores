@@ -15,6 +15,9 @@ class PaginaActual {
     }
 }
 
+/**
+ * Inicia una sesión php segura
+ */
 function sec_session_start() {
     $nombre_sesion = 'sec_session_id';
     $seguro = SECURE;
@@ -524,4 +527,24 @@ function obtener($key, $filtro=FILTER_UNSAFE_RAW) {
 	    return filter_var(isset($_GET[$key])?$_GET[$key]:$_POST[$key], $filtro);
     else
         return null;
+}
+
+/**
+ * Imprime un icono de la fuente de google, se puede elegir el color, fondo o tamaño
+ * Para conocer los valores adecuados a los parametros consultar la documentación de
+ * materializecss.
+ * @param string $icon_name icon name
+ * @param null|string $color color for the icon, without -text, i.e. 'amber'
+ * @param null|string $background color for the background of the i element, i.e. 'red'
+ * @param null|string $size size of the icon (see materializecss), i.e. 'small'
+ */
+function printIcon($icon_name, $color = null, $background = null, $size = null)
+{
+    if ($color) $color = ' ' . $color . '-text';
+    else            $color = '';
+    if ($background) $background = ' ' . $background;
+    else            $background = '';
+    if ($size) $size = ' ' . $size;
+    else            $size = '';
+    printf("<i class='material-icons%s%s%s'>%s</i>", $color, $background, $size, $icon_name);
 }

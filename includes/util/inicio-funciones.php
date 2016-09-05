@@ -7,8 +7,8 @@
  * Lorenzo Vaquero Otal
  * 13/08/2016
  */
- 
-include_once(dirname(__FILE__) . '/panel-util.php');
+
+include_once(dirname(__FILE__) . '/panel.php');
 
 function normalizaHora($hora) { // Para que al obtener las horas de la API no aparezcan los segundos
 	if(empty($hora)){

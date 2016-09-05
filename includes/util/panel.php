@@ -175,7 +175,7 @@
 			$nombre = $menu['nombre'];
 			$precio = $menu['precio'];
 			$idM = $menu['_id'];
-			echo "<li pos='$escrito' menuid='$idM' class='collection-item dismissable'><span class='menNombre'>$nombre</span><span class='badge precio'><span class='menPrecio'>$precio </span><a class='dismisser' href='#'><i class='material-icons amber-text'>delete_forever</i></a></span></li>";
+			echo "<li data-pos='$escrito' data-menuid='$idM' class='collection-item dismissable'><span class='menNombre'>$nombre</span><span class='badge precio'><span class='menPrecio'>$precio </span><a class='dismisser' href='#'><i class='material-icons amber-text'>delete_forever</i></a></span></li>";
 			$escrito++;
 		}
 		if( $escrito == 0) {
