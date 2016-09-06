@@ -10,10 +10,9 @@ require_once(dirname(__FILE__) . '/../../includes/functions.php');
 if (!login_check()) die("¡Eres un pequeño hackercillo! ¿O qué eres tú? Pillín... e.e");
 /* LA PAGINA REQUIERE ESTAR LOGEADO */
 
-include_once dirname(__FILE__) . "/panel_elements/view_modalConfirmarEliminacion.php";
-
 // Utiliza el script manejoPlatosMenus
-simple_script_include("/js/manejoPlatosMenus.js");
+simple_script_include("/js/panel.js");
+simple_script_include("/js/modal_generico.js");
 
 ?>
 

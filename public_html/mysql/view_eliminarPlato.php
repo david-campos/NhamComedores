@@ -6,7 +6,7 @@
 
 include_once dirname(__FILE__).'/../../includes/model/Platos.php';
 include_once dirname(__FILE__).'/../../includes/model/Tener.php';
-include_once dirname(__FILE__).'/../../includes/model/Misplatos.php';
+include_once dirname(__FILE__) . '/../../includes/model/MisPlatos.php';
 include_once dirname(__FILE__).'/../../includes/functions.php';
 
 // ESTO ES JSON!

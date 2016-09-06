@@ -26,9 +26,11 @@ $platos = obtenerPlatosServidos($_SESSION['id_comedor'], date('Y-m-d'));
                 for($j=0; $j<count($platos[$i]); $j++) {
                     $plato = $platos[$i][$j];
                     ?>
-                     <li class="collection-item" data-agotado='<?php echo $plato['agotado']; ?>'>
+                    <li class="collection-item eliminable" data-agotado='<?php echo $plato['agotado']; ?>'
+                        data-id='<?php echo $plato['_id']; ?>'>
                          <h6 class='nombre'> <?php echo $plato['nombre']; ?> </h6>
                          <span class='descripcion'><?php  echo $plato['descripcion']; ?></span>
+                        <a class="secondary-content"><i class="material-icons">delete</i></a>
                      </li>
                     <?php
                 }
