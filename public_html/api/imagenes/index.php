@@ -12,7 +12,7 @@ if ( isset($_GET['id']) ) {
 	// Comprobamos que el id es numérico
 	if( preg_match("/[0-9]+/", $id) ) {
 		$file = "detail_$id.png";
-		if( devolverImagen($file, $_GET['ancho']) )
+        if (devolverImagen($file, isset($_GET['ancho']) ? $_GET['ancho'] : null))
 			exit();
 	}
 }
