@@ -304,6 +304,11 @@ div.valign.cargando{
 	color: red;
 	font-weight: bold;
 }
+
+.tabs {
+    margin-top: 0.5em;
+}
+
  /* slider dots */
 .slider .indicators .indicator-item.active {
 	background-color: #8bc34a;
@@ -350,7 +355,11 @@ textarea.materialize-textarea:focus:not([readonly]){
 	border-bottom: 2px solid #ffc107;
 }
 
-a.btn {
+.materialboxed {
+    display: inline-block;
+}
+
+.btn {
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */

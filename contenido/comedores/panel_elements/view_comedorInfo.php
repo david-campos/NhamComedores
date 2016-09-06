@@ -21,6 +21,12 @@ if ($comedor === null) die('El comedor no existe?');
 ?>
 <ul class="collection z-depth-1">
     <li class="collection-item">
+        <div class="row center">
+            <img class="materialboxed responsive-img z-depth-1" data-caption="Imagen del comedor"
+                 src="<?php echo $comedor->getImagen(); ?>">
+        </div>
+    </li>
+    <li class="collection-item">
         <div class="row">
             <div class="col s12 m6">
                 <h5 class="amber-text">
@@ -67,12 +73,6 @@ if ($comedor === null) die('El comedor no existe?');
                 <h5 class="amber-text"><i class="material-icons prefix ajustado">call</i>Teléfono</h5>
                 <span><?php echo $comedor->getTlfn(); ?></span>
             </div>
-        </div>
-    </li>
-    <li class="collection-item">
-        <div class="row center">
-            <img class="materialboxed responsive-img z-depth-1" data-caption="Imagen del comedor"
-                 src="<?php $comedor->getImagen(); ?>">
         </div>
     </li>
 </ul>
