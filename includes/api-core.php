@@ -294,7 +294,7 @@ function obtenerLineas($tipoConsulta,$valores) {
  * Si la imagen original no existe no se enviará nada.
  * 
  * @param string $file Dirección del archivo de imagen original
- * @param int $ancho Nuevo ancho para la imagen
+ * @param int|null $ancho Nuevo ancho para la imagen
  * @return bool TRUE si se envía una imagen, FALSE si no se envía nada.
  */
 function devolverImagen($file, $ancho) {
@@ -304,25 +304,26 @@ function devolverImagen($file, $ancho) {
 		imagesavealpha($img, true);
 		
 		// Comprobamos si se ha pedido un ancho especial
-		if ( isset($ancho) ) {
+        if ($ancho !== null) {
 			$newWidth = filter_var($ancho, FILTER_SANITIZE_NUMBER_INT);
 			list($width, $height) = getimagesize($file);
-			
+
 			// El ancho requerido es menor que la imagen?
 			if( $newWidth < $width) {
 				$newHeight = ($height/$width)*$newWidth;
-				
-				$tmp = imagecreatetruecolor($newWidth, $newHeight);				
+
+                $tmp = imagecreatetruecolor($newWidth, $newHeight);
 				imagealphablending($tmp, false);
 				imagesavealpha($tmp, true);
-				
-				imagecopyresampled($tmp, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+                imagecopyresampled($tmp, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
 				imagedestroy($img);
-				
-				$img = $tmp;
+
+                $img = $tmp;
 			}
 		}
-		header("Content-type: image/png");
+
+        header("Content-type: image/png;");
 		imagepng($img);
 		
 		return true;
