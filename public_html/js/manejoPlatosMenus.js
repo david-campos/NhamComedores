@@ -8,6 +8,8 @@ var platos;
 var menus;
 
 $(document).ready(function(){
+	// Material-box para la imagen
+	$('.materialboxed').materialbox();
     // Al hacer click en el tab de platos, se muestran los platos y se ocultan los menus
         $("#platos_tab").click(function(){
             if(! $("#platos_tab").hasClass("active") ) {

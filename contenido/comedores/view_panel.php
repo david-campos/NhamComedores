@@ -4,7 +4,6 @@
  * David Campos Rodríguez
  */
 
-require_once(dirname(__FILE__) . '/../../includes/util/panel.php');
 require_once(dirname(__FILE__) . '/../../includes/functions.php');
 
 /* LA PAGINA REQUIERE ESTAR LOGEADO */
@@ -17,7 +16,6 @@ include_once dirname(__FILE__) . "/panel_elements/view_modalConfirmarEliminacion
 simple_script_include("/js/manejoPlatosMenus.js");
 
 ?>
-<div class="row center"><img class="responsive-img z-depth-1" src="/api/imagenes/detail_1.png"></div>
 
 <div class="row">
     <ul class="tabs">
@@ -33,5 +31,5 @@ simple_script_include("/js/manejoPlatosMenus.js");
 </div>
 
 <div class="row">
-
+    <?php include dirname(__FILE__) . '/panel_elements/view_comedorInfo.php'; ?>
 </div>
