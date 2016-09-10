@@ -1,6 +1,7 @@
 <?php
 
 include_once dirname(__FILE__).'/db_config/psl-config.php';
+include_once dirname(__FILE__) . '/db_connect.php';
 
 class PaginaActual {
     var $dir;
@@ -377,7 +378,7 @@ function obtenerPaginaActual($lookFor=null) {
             return obtenerPaginaActual($nodo['if_logged']);
         } else {
             if (seteada('error')) {
-                $pagActual = new PaginaActual($lookFor, $nodo['dir'], true, obtener('error'));
+                $pagActual = new PaginaActual($lookFor, $nodo['dir'], true, htmlspecialchars(obtener('error'), ENT_QUOTES, 'UTF-8'));
             } else {
                 $pagActual = new PaginaActual($lookFor, $nodo['dir']);
             }
@@ -395,7 +396,8 @@ function obtenerPaginaActual($lookFor=null) {
  */
 function include_content($paginaActual) {
     if($paginaActual->error)
-        echo $paginaActual->error_html;
+        echo '<div class="error">' . $paginaActual->error_html . '</div>' .
+            '<a href="/' . $paginaActual->id . '/">Volver</a>';
     else
         include dirname(__FILE__)."/../contenido/".$paginaActual->dir;
 }
@@ -423,9 +425,14 @@ function script_include($script) {
 
 function scripts_include() {
     $json = json_decode(file_get_contents(dirname(__FILE__)."/scripts.json"), true);
+    $pag_actual = obtenerPaginaActual();
     if($json)
-        foreach ($json as $script) {
-            script_include($script);
+        foreach ($json as $section => $scripts) {
+            if (preg_match($section, $pag_actual->id) === 1) {
+                foreach ($scripts as $script) {
+                    script_include($script);
+                }
+            }
         }
 }
 
@@ -454,10 +461,15 @@ function link_include($link_info, $rel) {
 
 function links_include() {
     $json = json_decode(file_get_contents(dirname(__FILE__)."/links.json"), true);
+    $pag_actual = obtenerPaginaActual();
     if($json)
         foreach ($json as $rel => $array) {
-            foreach ($array as $name => $link) {
-                link_include($link, $rel);
+            foreach ($array as $pattern => $links) {
+                if (preg_match($pattern, $pag_actual->id) === 1) {
+                    foreach ($links as $name => $link) {
+                        link_include($link, $rel);
+                    }
+                }
             }
         }
 }
@@ -488,6 +500,17 @@ function errorJson($error) {
 }
 
 /**
+ * Imprime el error en formato json y permite además introducir una respuesta
+ * @param $error string error a escribir
+ * @param $respuesta string respuesta a incluir
+ * @return string
+ */
+function errorJsonConRespuesta($error, $respuesta) {
+    $array = array('status' => 'ERROR', 'error' => $error, 'respuesta' => $respuesta);
+    return json_encode($array);
+}
+
+/**
  * Muestra el exito como una salida JSON (increíble, ¿verdad? Nunca pensaste que verías el éxito, como tal,
  * representado en JSON).
  * @param $respuesta mixed Valor para el campo respuesta del JSON
@@ -502,8 +525,6 @@ function exitoJson($respuesta) {
  * Comprueba si una variable ha sido seteada
  * @param $key string Clave de la variable
  * @return bool
- *
- * @deprecated Utilizar solo obtener
  */
 function seteada($key) {
 	return isset($_GET[$key]) || isset($_POST[$key]);

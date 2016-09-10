@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . "/Comedores.php"; // ComedorTO
+require_once dirname(__FILE__) . "/ComedorTO.php"; // ComedorTO
 
 require_once dirname(__FILE__) . "/MysqliDAO.php"; // mysqli es el empleado actualmente
 
@@ -33,4 +33,9 @@ interface IComedoresDAO
      * @throws Exception si hay algún fallo obteniéndolo
      */
     public function obtenerComedorTO($id);
+
+    /**
+     * @param $to ComedorTO El TO con el que actualizar el comedor
+     */
+    public function actualizarComedorTO($to);
 }

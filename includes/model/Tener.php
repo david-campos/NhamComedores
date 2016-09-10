@@ -29,6 +29,22 @@ function asociarTener($id_comedor, $fecha, $agotado, $id_plato) {
     }
 }
 
+function setAgotadoPlato($id_comedor, $id_plato, $fecha, $agotado) {
+    global $mysqli;
+
+    $agotado = ($agotado && $agotado != 'false' ? 1 : 0);
+    if ($stmt = $mysqli->prepare('UPDATE Tener SET agotado=? WHERE id_plato=? AND id_comedor=? AND fecha=? LIMIT 1')) {
+        $stmt->bind_param('iiis', $agotado, $id_plato, $id_comedor, $fecha);
+
+        if (!($stmt->execute() && $stmt->affected_rows == 1)) {
+            $stmt->close();
+            throw new Exception('setAgotadoPlato: no se pudo ejecutar o las filas afectadas son 0');
+        }
+        $stmt->close();
+    } else
+        throw new Exception('setAgotadoPlato-prepare: ' . $mysqli->error);
+}
+
 /**
  * Indica que un comedor ya no va a servir un plato en una fecha determinada, borrando de la base la asociación
  * correspondiente.

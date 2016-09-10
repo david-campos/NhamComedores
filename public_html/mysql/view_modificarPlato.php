@@ -20,11 +20,6 @@ define("NOMBRE_KEY", "nombre");
 define("DESCRIPCION_KEY", "descripcion");
 define("TIPO_KEY", "tipo");
 
-function errorJsonConPlato($error, $plato) {
-    $array = array( 'status' => 'ERROR', 'error' => $error, 'respuesta'=>$plato);
-    return json_encode($array);
-}
-
 if( login_check() ) {
     $plato = array(
         "nombre"=>obtener(NOMBRE_KEY, FILTER_SANITIZE_STRING),
@@ -46,7 +41,7 @@ if( login_check() ) {
 
         if ($prestado === null) {
             $mysqli->rollback();
-            die(errorJsonConPlato('El plato no pertenece al comedor', $plato));
+            die(errorJsonConRespuesta('El plato no pertenece al comedor', $plato));
         }
 
         if ($prestado) {
@@ -65,7 +60,7 @@ if( login_check() ) {
         die(exitoJson($plato));
     } catch(Exception $e) {
         $mysqli->rollback();
-        die(errorJsonConPlato($e->getMessage(), $plato));
+        die(errorJsonConRespuesta($e->getMessage(), $plato));
     }
 } else
     die(errorJson('No logeado'));

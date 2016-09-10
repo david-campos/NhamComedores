@@ -4,7 +4,7 @@
  */
 
 require_once dirname(__FILE__) . "/DAO.php";
-require_once dirname(__FILE__) . "/Comedores.php"; // ComedorTO
+require_once dirname(__FILE__) . "/ComedorTO.php"; // ComedorTO
 require_once dirname(__FILE__) . "/../db_connect.php"; // Obtiene mysqli
 
 /**
@@ -113,5 +113,34 @@ class MysqliComedoresDAO extends MysqliDAO implements IComedoresDAO
 
         } else
             throw new Exception('ComedoresDAO->obtenerComedorTO:prepare: ' . $mysqli->error);
+    }
+
+    /**
+     * @param $to ComedorTO El TO con el que actualizar el comedor
+     * @throws Exception Si no se puede realizar la actualización
+     */
+    public function actualizarComedorTO($to) {
+        // Listo, procedemos a update
+        $mysqli = $this->getMysqli();
+        $apertura = $to->getApertura();
+        $horario = $to->getHorarioComedor();
+        $consulta = "UPDATE Comedores SET nombre=?,direccion=?,diaInicioApertura=?,diaFinApertura=?,hAperturaIni=?,
+          hAperturaFin=?,nombreContacto=?,telefono=?,horaInicio=?,horaFin=?,promocion=? WHERE _id=? LIMIT 1";
+        if ($stmt = $mysqli->prepare($consulta)) {
+            $stmt->bind_param('sssssssssssi',
+                $to->getNombre(), $to->getDireccion(),
+                $apertura['dias'][0], $apertura['dias'][1],
+                $apertura['horas'][0], $apertura['horas'][1],
+                $to->getNombreContacto(), $to->getTlfn(),
+                $horario[0], $horario[1], $to->getPromocion(),
+                $to->getId());
+            if (!$stmt->execute()) {
+                $stmt->close();
+                throw new Exception('Error al ejecutar actualizacion: ' . $mysqli->error);
+            }
+            $stmt->close();
+            return;
+        } else
+            throw new Exception('ComedoresDAO->actualizarComedorTO:prepare: ' . $mysqli->error);
     }
 }

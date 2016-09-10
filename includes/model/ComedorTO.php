@@ -64,7 +64,7 @@ class ComedorTO
      * @return integer Su número correspondiente, comenzando en 0, o -1 en caso de
      *     cadena inválida.
      */
-    protected static function sp_aNumero($dia) {
+    public static function sEnNumero($dia) {
         switch ($dia) {
             case 'lunes':
                 return 0;
@@ -99,10 +99,10 @@ class ComedorTO
      * @param integer|string $numCi Día de la semana que finaliza el intervalo de comparación
      * @return bool TRUE si el día se encuentra entre los dos días dados, FALSE en caso contrario
      */
-    protected static function sp_enPlazo($dia, $numAp, $numCi) {
-        if (!is_numeric($dia)) $dia = ComedorTO::sp_aNumero($dia);
-        if (!is_numeric($numAp)) $numAp = ComedorTO::sp_aNumero($numCi);
-        if (!is_numeric($numCi)) $numCi = ComedorTO::sp_aNumero($numCi);
+    public static function sEnPlazo($dia, $numAp, $numCi) {
+        if (!is_numeric($dia)) $dia = ComedorTO::sEnNumero($dia);
+        if (!is_numeric($numAp)) $numAp = ComedorTO::sEnNumero($numAp);
+        if (!is_numeric($numCi)) $numCi = ComedorTO::sEnNumero($numCi);
 
         if ($numAp < $numCi) {
             return $numAp <= $dia && $dia <= $numCi;
@@ -117,7 +117,7 @@ class ComedorTO
      * @param string $hora La hora en formato 'hh:mm:ss'
      * @return string La hora en formato 'hh:mm'
      */
-    protected static function sp_formatearHora($hora) {
+    public static function sFormatearHora($hora) {
         return substr($hora, 0, strrpos($hora, ':'));
     }
 
@@ -135,9 +135,9 @@ class ComedorTO
      * @return string Html que indica el horario de comedor
      */
     public function getHorarioComedorEnHtml() {
-        return sprintf("<p>%s - %s</p>",
-            ComedorTO::sp_formatearHora($this->_horarioComedor[0]),
-            ComedorTO::sp_formatearHora($this->_horarioComedor[1]));
+        return sprintf("%s - %s",
+            ComedorTO::sFormatearHora($this->_horarioComedor[0]),
+            ComedorTO::sFormatearHora($this->_horarioComedor[1]));
     }
 
     /**
@@ -239,13 +239,92 @@ class ComedorTO
         return $this->_loginName;
     }
 
+    /**
+     * @param string $nombre
+     */
+    public function setNombre($nombre) {
+        if ($nombre !== "")
+            $this->_nombre = $nombre;
+    }
+
+    /**
+     * @param array $horarioComedor
+     */
+    public function setHorarioComedor($horarioComedor) {
+        if ($this->_horaValida($horarioComedor[0]) && $this->_horaValida($horarioComedor[1]))
+            $this->_horarioComedor = $horarioComedor;
+    }
+
+    /**
+     * @param string $tlfn
+     */
+    public function setTlfn($tlfn) {
+        if (preg_match("/\d{9}/", $tlfn) === 1)
+            $this->_tlfn = $tlfn;
+    }
+
+    /**
+     * @param null|string $nombreContacto
+     */
+    public function setNombreContacto($nombreContacto) {
+        if ($nombreContacto === "")
+            $this->_nombreContacto = null;
+        else
+            $this->_nombreContacto = $nombreContacto;
+    }
+
+    /**
+     * @param string $direccion
+     */
+    public function setDireccion($direccion) {
+        if ($direccion !== "")
+            $this->_direccion = $direccion;
+    }
+
+    /**
+     * @param array $apertura
+     */
+    public function setApertura($apertura) {
+        if ($this->_diaValido($apertura['dias'][0]) && $this->_diaValido($apertura['dias'][1])
+            && $this->_horaValida($apertura['horas'][0]) && $this->_horaValida($apertura['horas'][1])
+        )
+            $this->_apertura = $apertura;
+    }
+
+    /**
+     * @param $dia string Dia a comprobar
+     * @return bool true si el dia es válido, false si no es válido para el SET de la base de datos
+     */
+    private function _diaValido($dia) {
+        return preg_match("/lunes|martes|miercoles|jueves|viernes|sabado|domingo/", $dia) === 1;
+    }
+
+    /**
+     * @param $hora string Hora a comprobar
+     * @return bool true si la hora es válida, false si no es válida
+     */
+    private function _horaValida($hora) {
+        if (preg_match("/\d{1,2}:\d{1,2}/", $hora) !== 1) return false;
+        preg_match_all("/(\d{1,2})/", $hora, $values);
+        if (intval($values[1][0]) > 23 || intval($values[1][0]) < 0) return false;
+        if (intval($values[1][1]) > 59 || intval($values[1][1]) < 0) return false;
+        return true;
+    }
+
+    /**
+     * @param string $promocion
+     */
+    public function setPromocion($promocion) {
+        $this->_promocion = $promocion;
+    }
+
     // PARTE PRIVADA
     private function _getDiasAperturaEnHtml() {
         $dias = array('L', 'Ma', 'Mi', 'J', 'V', 'S', 'D');
         $ret = "<p>";
         for ($i = 0; $i < 7; $i++) {
             $ret .= "<span class='dia ";
-            if (ComedorTO::sp_enPlazo($i, $this->_apertura['dias'][0], $this->_apertura['dias'][1])) {
+            if (ComedorTO::sEnPlazo($i, $this->_apertura['dias'][0], $this->_apertura['dias'][1])) {
                 $ret .= "abierto";
             } else {
                 $ret .= "cerrado";
@@ -257,8 +336,8 @@ class ComedorTO
 
     private function _getHorasAperturaEnHtml() {
         return sprintf("<p>%s - %s</p>",
-            ComedorTO::sp_formatearHora($this->_apertura['horas'][0]),
-            ComedorTO::sp_formatearHora($this->_apertura['horas'][1]));
+            ComedorTO::sFormatearHora($this->_apertura['horas'][0]),
+            ComedorTO::sFormatearHora($this->_apertura['horas'][1]));
     }
 
     // ATRIBUTOS

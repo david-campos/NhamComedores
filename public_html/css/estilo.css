@@ -169,6 +169,9 @@ div.material-tooltip {
     max-width: 20%;
     word-wrap: break-word;
     color: black;
+    -webkit-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 div.material-tooltip .backdrop {
@@ -198,8 +201,26 @@ div.material-tooltip p span {
     color: grey;
 }
 
+#platos li.eliminable a {
+    display: none;
+}
+
+#platos li.eliminable:hover a {
+    display: block;
+}
+
 table.tablaMisPlatos tr {
 	transition: color 1s;
+}
+
+div.etiqueta {
+    padding: 0.5rem 0.5rem 0 0.75rem !important;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+div.etiqueta a.btn-flat {
+    width: 100%;
 }
 
 ul.lista-de-platos .collapsible-header span.tipo-plato {
@@ -317,12 +338,14 @@ div.valign.cargando{
  /* label focus color */
 input[type=password]:focus:not([readonly]) + label,
 input[type=text]:focus:not([readonly]) + label,
+input[type=tel]:focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
  color: #ffa000;
 }
 /* label underline focus color */
 input[type=password]:focus:not([readonly]),
 input[type=text]:focus:not([readonly]),
+input[type=tel]:focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]){
  border-bottom: 1px solid #ffa000;
  box-shadow: 0 1px 0 0 #ffa000;

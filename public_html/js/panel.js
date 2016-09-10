@@ -7,6 +7,7 @@
 var divPlatos = null;
 var divMenus = null;
 var platosEliminados = {};
+var platosAgotados = [];
 
 $(document).ready(function(){
     divPlatos = $("#platos");
@@ -18,7 +19,13 @@ $(document).ready(function(){
     }
 
     // Material-box para la imagen
-	$('.materialboxed').materialbox();
+    $('.materialboxed').materialbox();
+    $('.modal-trigger').leanModal({
+        complete: function () {
+            $('#modEditInfoForm').find("input:not(.select-dropdown),textarea").val("");
+        }
+    });
+    $('select').material_select();
 
     // Al hacer click en el tab de platos, se muestran los platos y se ocultan los menus
     $("#platos_tab").click(function () {
@@ -37,17 +44,103 @@ $(document).ready(function(){
         }
     });
 
-    // Los platos se pueden deslizar para eliminar
+    // Los platos se pueden deslizar para eliminar, y clickear en agotar, desagotar o eliminar
     divPlatos.find("li.eliminable").each(function () {
         hacerDeslizable($(this));
         $(this).on("dismissed", function () {
             eliminarPlato($(this))
         });
-        $(this).find("a").click(function () {
+
+        $(this).find("a.eliminar").click(function (event) {
+            event.preventDefault();
             eliminarPlato($(this).closest("li"));
-        });
+        }).tooltip({tooltip: 'Eliminar'});
+        $(this).find("a.agotar").click(function (event) {
+            event.preventDefault();
+            agotarPlato($(this).closest("li"), true);
+        }).tooltip({tooltip: 'Agotar'});
+        $(this).find("a.desagotar").click(function (event) {
+            event.preventDefault();
+            agotarPlato($(this).closest("li"), false);
+        }).tooltip({tooltip: 'Desagotar'});
     });
+
+    var modE = $("#modEditInfo");
+    // Máscaras del modal de edición
+    modE.find("#tlfn").mask("999 99 99 99");
+    modE.find("#apertura_horas").mask("99:99 - 99:99");
+    modE.find("#horario").mask("99:99 - 99:99");
+    modE.find("input[id],textarea[id],div[data-tooltip]").tooltip();
+    modE.find("#btnEditInfoSave").click(handleSaveClick);
 });
+
+/**
+ * Maneja el click sobre el boton de guardar del modal de editar la información del comedor
+ */
+function handleSaveClick(e) {
+    e.preventDefault();
+    $("#modEditInfoForm").submit();
+}
+
+/**
+ * Agota o desagota el plato, segun valor
+ * @param liPlato {JQuery} Elemento li del plato a agotar
+ * @param valor {boolean} True para agotar y false para desagotar
+ */
+function agotarPlato(liPlato, valor) {
+    var id = liPlato.attr('data-id');
+    platosAgotados.push({id: id, li: liPlato});
+    $.post("/mysql/view_agotarPlato.php",
+        {'idPlato': id, 'agotado': valor},
+        platoAgotado,
+        "json");
+}
+
+/**
+ * Maneja la respuesta del ajax de agotar plato
+ * @param data {{status:String,error?:String,respuesta?:{_id:int,agotado}}} Respuesta del php parseada
+ */
+function platoAgotado(data) {
+    if (data.status === "OK") {
+        var id = data.respuesta._id;
+        var agotado = (data.respuesta.agotado === 'true');
+        for (var i = 0; i < platosAgotados.length; i++) {
+            if (platosAgotados[i].id == id) {
+                var li = platosAgotados[i].li;
+                var a = platosAgotados[i].li.find("a.agotar, a.desagotar");
+
+                a.removeClass("desagotar").removeClass("agotar");
+                li.attr("data-agotado", agotado ? 1 : 0);
+
+                if (agotado) {
+                    a.addClass('desagotar');
+                    a.find("i")
+                        .removeClass('amber-text')
+                        .addClass('light-green-text')
+                        .html('check_circle');
+                    a.unbind().click(function (event) {
+                        event.preventDefault();
+                        agotarPlato($(this).closest("li"), false);
+                    }).tooltip('remove');
+                    a.tooltip({tooltip: 'Desagotar'});
+                } else {
+                    a.addClass('agotar');
+                    a.find("i")
+                        .removeClass('light-green-text')
+                        .addClass('amber-text')
+                        .html('remove_circle');
+                    a.unbind().click(function (event) {
+                        event.preventDefault();
+                        agotarPlato($(this).closest("li"), true);
+                    }).tooltip('remove');
+                    a.tooltip({tooltip: 'Agotar'});
+                }
+                platosAgotados.slice(i, 1);
+                break;
+            }
+        }
+    } else if (console && console.log) console.log(data.error);
+}
 
 /**
  * Cuando es eliminado un plato, consulta si realmente se desea eliminar,
@@ -59,8 +152,7 @@ function eliminarPlato(liPlato) {
     const RESP_CANCELAR = "Cancelar";
     ModalGenerico.show(
         function (resp) {
-            switch (resp) {
-                case RESP_ELIMINAR:
+            if (resp === RESP_ELIMINAR) {
                     var paramId = liPlato.attr('data-id');
                     var hoy = new Date();
                     var paramFecha = hoy.getFullYear() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getDate();
@@ -73,9 +165,6 @@ function eliminarPlato(liPlato) {
                         {'idPlato': paramId, 'fecha': paramFecha, 'asoc': 'tener'},
                         platoEliminado,
                         "json");
-                    break;
-                case RESP_CANCELAR:
-                    break;
             }
         },
         "¿Realmente desea eliminar el plato '" + liPlato.find("h6").text() + "'?",
@@ -87,7 +176,7 @@ function eliminarPlato(liPlato) {
 
 /**
  * Maneja la respuesta del ajax de eliminar plato
- * @param data {{status:'OK',respuesta:{id_plato:int,fecha:String}}} Respuesta de ajax parseada de JSON
+ * @param data {{status:'OK',respuesta:{id_plato:int,fecha:String}}|{status:'ERROR',error:String}} Respuesta de ajax parseada de JSON
  */
 function platoEliminado(data) {
     if (data.status == "OK") {
@@ -114,6 +203,7 @@ function hacerDeslizable($this){
     var swipeLeft = false;
     var swipeRight = false;
     // Materializecss incluye la librería Hammer.min.js entre sus archivos...
+    if (!$this.hammer) return;
 	$this.hammer({
 		prevent_default: false
 	}).bind('pan', function(e) {

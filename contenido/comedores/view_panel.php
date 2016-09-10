@@ -29,6 +29,4 @@ simple_script_include("/js/modal_generico.js");
     </div>
 </div>
 
-<div class="row">
-    <?php include dirname(__FILE__) . '/panel_elements/view_comedorInfo.php'; ?>
-</div>
+<?php include dirname(__FILE__) . '/panel_elements/view_comedorInfo.php'; ?>

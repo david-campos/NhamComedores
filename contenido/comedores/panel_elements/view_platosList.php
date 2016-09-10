@@ -30,7 +30,12 @@ $platos = obtenerPlatosServidos($_SESSION['id_comedor'], date('Y-m-d'));
                         data-id='<?php echo $plato['_id']; ?>'>
                          <h6 class='nombre'> <?php echo $plato['nombre']; ?> </h6>
                          <span class='descripcion'><?php  echo $plato['descripcion']; ?></span>
-                        <a class="secondary-content"><i class="material-icons">delete</i></a>
+                        <a href="#" class="secondary-content red-text eliminar"><i class="material-icons">delete</i></a>
+                        <?php if ($plato['agotado']) { ?>
+                            <a href="#" class="secondary-content light-green-text desagotar"><i class="material-icons">check_circle</i></a>
+                        <?php } else { ?>
+                            <a href="#" class="secondary-content amber-text agotar"><i class="material-icons">remove_circle</i></a>
+                        <?php } ?>
                      </li>
                     <?php
                 }
