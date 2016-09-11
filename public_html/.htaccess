@@ -2,6 +2,9 @@ RewriteEngine On
 # Do not remove this line, otherwise mod_rewrite rules will stop working
 RewriteBase /
 
+# Previene clickjacking
+Header set X-Frame-Options SAMEORIGIN
+
 # Se manejan los /loquesea como contenidos para index.php
 RewriteCond %{REQUEST_URI} !/api\/?$
 RewriteCond %{REQUEST_URI} !/index\/?$

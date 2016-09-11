@@ -13,22 +13,20 @@ const TIPOS_PLATOS = ["Primero", "Segundo", "Postre", "Desconocido"];
 var comedor_listo = false;
 var mis_platos_listo = false;
 var document_ready = false;
-var introduccion_platos_listo = false;
 
 var COMEDOR = null;
 var MIS_PLATOS = null;
 
 $(document).on('quizas-listo', function () {
-    if (comedor_listo && mis_platos_listo && document_ready && introduccion_platos_listo)
+    if (comedor_listo && mis_platos_listo && document_ready && Init.ready_scripts.IntroduccionPlatos)
         $(document).trigger("iniciar-calendario");
 });
 
-$(document).ready(function () {
-    document_ready = true;
+$(document).on(Init.NEW_READY_SCRIPT_EVENT, function () {
     $(document).trigger('quizas-listo');
 });
-$(document).on(IntroduccionPlatos.READY_EVENT, function () {
-    introduccion_platos_listo = true;
+$(document).ready(function () {
+    document_ready = true;
     $(document).trigger('quizas-listo');
 });
 $.get("/mysql/view_comedorInfo.php", function (data) {

@@ -12,7 +12,7 @@
 	<form class="col s12" action="/mysql/login.php<?php
 		if( isset($_GET['c']) )
 			echo '?c='.addslashes(htmlentities(urlencode($_GET['c'])));
-	?>" method="post" id="formularioLogin">
+    ?>" method="post" id="formularioLogin" autocomplete="off">
 		<div class="row">
 			<div class="input-field col s12">
 				<i class="material-icons prefix">account_box</i>

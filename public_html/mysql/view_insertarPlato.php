@@ -59,6 +59,9 @@ if( login_check() ) {
     try {
         if (!$plato['_id'] || $plato['_id'] < 0) {
             // Si no se ha especificado id, tratamos de insertarlo
+            if (preg_match("/[0-2].{4}/", $plato['tipo']) !== 1)
+                die(errorJson('El tipo de plato no es válido, ¿posible ataque?'));
+
             $plato = insertarPlato($plato['nombre'], $plato['descripcion'], $plato['tipo']);
         } else {
             // Si no, necesitamos obtenerlo para devolverlo

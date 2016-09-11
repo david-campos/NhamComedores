@@ -122,7 +122,7 @@
 		modal.find('select').material_select(); // Selects de materializecss
 		modal.find("form").submit(function(event){event.preventDefault();});
 
-        $(document).trigger(IntroduccionPlatos.READY_EVENT);
+		$(document).trigger(Init.PP_READY_EVENT);
 	});
 
     var prepararModal = function(){

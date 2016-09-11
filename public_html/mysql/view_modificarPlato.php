@@ -22,14 +22,17 @@ define("TIPO_KEY", "tipo");
 
 if( login_check() ) {
     $plato = array(
-        "nombre"=>obtener(NOMBRE_KEY, FILTER_SANITIZE_STRING),
-        "descripcion"=>obtener(DESCRIPCION_KEY, FILTER_SANITIZE_STRING),
+        "nombre" => htmlspecialchars(obtener(NOMBRE_KEY, FILTER_SANITIZE_STRING)),
+        "descripcion" => htmlspecialchars(obtener(DESCRIPCION_KEY, FILTER_SANITIZE_STRING)),
         "tipo"=>obtener(TIPO_KEY, FILTER_SANITIZE_STRING),
-        "_id"=>obtener(ID_PLATO_KEY, FILTER_SANITIZE_STRING),
+        "_id" => obtener(ID_PLATO_KEY, FILTER_SANITIZE_NUMBER_INT),
     );
 
     if(!($plato['nombre'] && $plato['descripcion'] && $plato['tipo'] && $plato['_id']))
         die(errorJson('Información de plato incompleta.'));
+
+    if (preg_match("/[0-2].{4}/", $plato['tipo']) !== 1)
+        die(errorJson('El tipo de plato no es válido, ¿posible ataque?'));
 
     try {
         // Empezamos

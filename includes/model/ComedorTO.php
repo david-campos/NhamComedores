@@ -297,18 +297,21 @@ class ComedorTO
      * @return array array asociativo de propiedadades
      */
     public function toArray() {
+        $ap = $this->getApertura();
+        $ho = $this->getHorarioComedor();
+        $co = $this->getCoordenadas();
         return array(
             "_id" => $this->getId(),
-            "diaInicioApertura" => $this->getApertura()['dias'][0],
-            "diaFinApertura" => $this->getApertura()['dias'][1],
-            "hAperturaIni" => $this->getApertura()['horas'][0],
-            "hAperturaFin" => $this->getApertura()['horas'][1],
+            "diaInicioApertura" => $ap['dias'][0],
+            "diaFinApertura" => $ap['dias'][1],
+            "hAperturaIni" => $ap['horas'][0],
+            "hAperturaFin" => $ap['horas'][1],
             "universidad" => $this->getUniversidad(),
             "nombre" => $this->getNombre(),
-            "horaInicio" => $this->getHorarioComedor()[0],
-            "horaFin" => $this->getHorarioComedor()[1],
-            "coordLat" => $this->getCoordenadas()[0],
-            "coordLon" => $this->getCoordenadas()[1],
+            "horaInicio" => $ho[0],
+            "horaFin" => $ho[1],
+            "coordLat" => $co[0],
+            "coordLon" => $co[1],
             "telefono" => $this->getTlfn(),
             "nombreContacto" => $this->getNombreContacto(),
             "direccion" => $this->getDireccion(),
