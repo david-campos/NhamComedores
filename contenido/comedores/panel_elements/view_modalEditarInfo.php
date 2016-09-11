@@ -38,12 +38,14 @@ $dias_val = array("lunes", "martes", "miercoles", "jueves", "viernes", "sabado",
             <div class="row">
                 <div class="input-field col s4">
                     <input id="name" name="name" type="text"
+                           maxlength="50" length="50"
                            data-tooltip="Introduce el nombre del comedor, p.ej. 'El Bulli'."
                            placeholder="<?php echo $comedor->getNombre(); ?>">
                     <label for="name">Nombre</label>
                 </div>
                 <div class="input-field col s8">
                     <input id="direccion" name="direccion" type="text"
+                           maxlength="120" length="120"
                            data-tooltip="Introduce la dirección del comedor, p.ej. 'Calle Falsa, 123'"
                            placeholder="<?php echo $comedor->getDireccion(); ?>">
                     <label for="direccion">Dirección</label>
@@ -83,6 +85,7 @@ $dias_val = array("lunes", "martes", "miercoles", "jueves", "viernes", "sabado",
             <div class="row">
                 <div class="input-field col s4">
                     <input id="contact_name" name="contact_name" type="text"
+                           maxlength="20" length="20"
                            data-tooltip="Introduce el nombre por el que preguntar al llamar, p. ej. 'Jon Snow'."
                            placeholder="<?php echo $comedor->getNombreContacto(); ?>">
                     <label for="contact_name">Nombre de contacto</label>
@@ -102,6 +105,7 @@ $dias_val = array("lunes", "martes", "miercoles", "jueves", "viernes", "sabado",
 
                 <div class="input-field col s12">
                     <textarea id="promocion" name="promocion" class="materialize-textarea"
+                              maxlength="280" length="280"
                               data-tooltip="Introduce un texto promocional que anime a los usuarios a venir a tu comedor."
                               placeholder="<?php echo $comedor->getPromocion(); ?>"></textarea>
                     <label for="promocion">Promoción</label>
