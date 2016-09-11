@@ -292,6 +292,32 @@ class ComedorTO
     }
 
     /**
+     * Devuelve un array que representa el objeto JSON.
+     * No devuelve el código ni el salt, por motivos de seguridad.
+     * @return array array asociativo de propiedadades
+     */
+    public function toArray() {
+        return array(
+            "_id" => $this->getId(),
+            "diaInicioApertura" => $this->getApertura()['dias'][0],
+            "diaFinApertura" => $this->getApertura()['dias'][1],
+            "hAperturaIni" => $this->getApertura()['horas'][0],
+            "hAperturaFin" => $this->getApertura()['horas'][1],
+            "universidad" => $this->getUniversidad(),
+            "nombre" => $this->getNombre(),
+            "horaInicio" => $this->getHorarioComedor()[0],
+            "horaFin" => $this->getHorarioComedor()[1],
+            "coordLat" => $this->getCoordenadas()[0],
+            "coordLon" => $this->getCoordenadas()[1],
+            "telefono" => $this->getTlfn(),
+            "nombreContacto" => $this->getNombreContacto(),
+            "direccion" => $this->getDireccion(),
+            "promocion" => $this->getPromocion(),
+            "loginName" => $this->getLoginName()
+        );
+    }
+
+    /**
      * @param $dia string Dia a comprobar
      * @return bool true si el dia es válido, false si no es válido para el SET de la base de datos
      */

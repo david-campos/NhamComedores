@@ -10,13 +10,43 @@ const LOOKS = ["one", "two", "3"];
 const COLORES = ["#aed581", "#8bc34a", "#689f38", "#f44336"];
 const TIPOS_PLATOS = ["Primero", "Segundo", "Postre", "Desconocido"];
 
-if(!COMEDOR || !MIS_PLATOS) {
-    COMEDOR = null;
-    MIS_PLATOS = null;
-    if(console) console.log("Se necesita la informacion de comedor y mis_platos para funcionar.");
-}
+var comedor_listo = false;
+var mis_platos_listo = false;
+var document_ready = false;
+var introduccion_platos_listo = false;
 
- // Arrays de nombres de meses
+var COMEDOR = null;
+var MIS_PLATOS = null;
+
+$(document).on('quizas-listo', function () {
+    if (comedor_listo && mis_platos_listo && document_ready && introduccion_platos_listo)
+        $(document).trigger("iniciar-calendario");
+});
+
+$(document).ready(function () {
+    document_ready = true;
+    $(document).trigger('quizas-listo');
+});
+$(document).on(IntroduccionPlatos.READY_EVENT, function () {
+    introduccion_platos_listo = true;
+    $(document).trigger('quizas-listo');
+});
+$.get("/mysql/view_comedorInfo.php", function (data) {
+    if (!data.error) {
+        COMEDOR = data;
+        comedor_listo = true;
+        $(document).trigger('quizas-listo');
+    }
+}, "json");
+$.get("/mysql/view_misPlatosInfo.php", function (data) {
+    if (!data.error) {
+        MIS_PLATOS = data;
+        mis_platos_listo = true;
+        $(document).trigger('quizas-listo');
+    }
+}, "json");
+
+// Arrays de nombres de meses
 var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
 	'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
@@ -486,8 +516,8 @@ var calendario; // Tabla del calendario
 var acciones; // Manejador de acciones
 
 // -- Inicialización del calendario
-$(document).ready(function() {
-	mes = new Date();
+$(document).on('iniciar-calendario', function () {
+    mes = new Date();
 	cache = new Cache();
 	modPlatos = new ModalPlatos($("#modPlatos"));
 	calendario = $("table#tCalendario");
@@ -499,50 +529,48 @@ $(document).ready(function() {
     var dias = calendario.find("tbody td.calDia");
 	listaMisPlatos = new ListaMisPlatos(listaUp, listaTds, listaDown, dias);
 
+    // La introducción de un plato llevará a esto
+    IntroduccionPlatos.platoIntroducido(platoIntroducido);
+
     acciones.siSolicitaRedibujar(redibujar);
 
 	$("body").css('overflow-x', 'hidden'); //No hay scroll horizontal aqui
 
 	$('select').material_select(); // Selects de materializecss
 
-	// La introducción de un plato llevará a esto
-    $(document).on(IntroduccionPlatos.READY_EVENT, function () {
-        IntroduccionPlatos.platoIntroducido(platoIntroducido);
+    // Descargamos dias con platos y mostramos
+    $.get(
+        API_URL,
+        {tipo: 5, id: COMEDOR._id, month: mes.getMonth() + 1, year: mes.getFullYear()},
+        function (data) {
+            // Hay que coger hasta <!--FIN--> por la propaganda, cuando tengamos
+            // server propio ya no hará falta.
+            var info = data.substring(0, data.indexOf("<!--FIN-->"));
+            var json = JSON.parse(info);
+            if (json['status'] == 'OK') {
+                cache.setDias(mes, json['respuesta']);
+                redibujar();
 
-        // Descargamos dias con platos y mostramos
-        $.get(
-            API_URL,
-            {tipo: 5, id: COMEDOR._id, month: mes.getMonth() + 1, year: mes.getFullYear()},
-            function (data) {
-                // Hay que coger hasta <!--FIN--> por la propaganda, cuando tengamos
-                // server propio ya no hará falta.
-                var info = data.substring(0, data.indexOf("<!--FIN-->"));
-                var json = JSON.parse(info);
-                if (json['status'] == 'OK') {
-                    cache.setDias(mes, json['respuesta']);
-                    redibujar();
+                siguienteAnteriorEnabled(true);
 
-                    siguienteAnteriorEnabled(true);
+                // Hemos cargado!
+                $("div#rCargando").hide();
+                $("div#rCalendario").show();
 
-                    // Hemos cargado!
-                    $("div#rCargando").hide();
-                    $("div#rCalendario").show();
-
-                    // Precarga el mes siguiente
-                    var smes = mes.getMonth() + 1;
-                    var syear = mes.getFullYear();
-                    if (smes == 12) {
-                        syear += 1;
-                        smes = 0;
-                    }
-
-                    precargarMes(new Date(syear, smes));
-                } else {
-                    alert("Ha habido un error."); // TODO: cambiar alert por algo con más estilo
-                    console.log(json);
+                // Precarga el mes siguiente
+                var smes = mes.getMonth() + 1;
+                var syear = mes.getFullYear();
+                if (smes == 12) {
+                    syear += 1;
+                    smes = 0;
 				}
-            }, "text");
-    });
+
+                precargarMes(new Date(syear, smes));
+            } else {
+                alert("Ha habido un error."); // TODO: cambiar alert por algo con más estilo
+                console.log(json);
+            }
+        }, "text");
 });
 // -- Fin de la inicialización
 

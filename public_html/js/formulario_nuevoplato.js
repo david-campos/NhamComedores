@@ -11,12 +11,6 @@
 // Declaracion de un "namespace" al estilo de Enterprise JQuery
 (function( IntroduccionPlatos, $, undefined ) {
 	/* Parte publica */
-    /**
-     * Evento lanzado sobre document cuando el modal está listo para empezar a usarse
-     * @type {string}
-     */
-    IntroduccionPlatos.READY_EVENT = 'introduccionplatos-ready';
-
 	/**
 	 * Abre el modal para introducir nuevo plato.
 	 *

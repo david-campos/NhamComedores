@@ -17,7 +17,6 @@ $page = obtener(PAGINADO_KEY, FILTER_SANITIZE_NUMBER_INT) or $page = 0;
 if( login_check() ) {
 	include_once dirname(__FILE__)."/view_nuevoPlatoForm.php";
     ?>
-    <script language="JavaScript" src="/js/mis-platos.js" async></script>
     <div class="row">
         <table class="striped tablaMisPlatos">
             <thead><tr>

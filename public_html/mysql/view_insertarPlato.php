@@ -47,8 +47,8 @@ if( login_check() ) {
     $fecha = obtener(FECHA_KEY, FILTER_SANITIZE_STRING) or $fecha = date('Y-m-d');
 
     $plato['_id'] = obtener(ID_PLATO_KEY, FILTER_SANITIZE_NUMBER_INT);
-    $plato['nombre'] = obtener(NAME_KEY, FILTER_SANITIZE_STRING);
-    $plato['descripcion'] = obtener(DESC_KEY, FILTER_SANITIZE_STRING);
+    $plato['nombre'] = htmlspecialchars(obtener(NAME_KEY, FILTER_SANITIZE_STRING));
+    $plato['descripcion'] = htmlspecialchars(obtener(DESC_KEY, FILTER_SANITIZE_STRING));
     $plato['tipo'] = obtener(TIPO_KEY, FILTER_SANITIZE_STRING);
     $plato['prestado'] = 1;
 

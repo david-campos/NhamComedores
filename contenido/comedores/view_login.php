@@ -7,8 +7,6 @@
  * David Campos Rodríguez
  */
 ?>
-<script language="JavaScript" type="text/javascript" src="/js/login.js"></script>
-<script language="JavaScript" type="text/javascript" src="/js/sha512.js"></script>
 <div class="row valign login">
 	<h4>Login</h4>
 	<form class="col s12" action="/mysql/login.php<?php

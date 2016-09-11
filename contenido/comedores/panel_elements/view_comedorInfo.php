@@ -71,13 +71,13 @@ include dirname(__FILE__) . "/view_modalEditarInfo.php";
                             contacto
                         </h5>
                         <span id="dispContacto">
-                    <?php
-                    if ($comedor->getNombreContacto() !== null)
-                        echo $comedor->getNombreContacto();
-                    else
-                        echo 'No indicado';
-                    ?>
-                </span>
+                            <?php
+                            if ($comedor->getNombreContacto() !== null)
+                                echo $comedor->getNombreContacto();
+                            else
+                                echo 'No indicado';
+                            ?>
+                        </span>
                     </div>
                     <div class="col s12 m6">
                         <h5 class="amber-text"><i class="material-icons prefix ajustado">call</i>Teléfono</h5>

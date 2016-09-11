@@ -7,7 +7,7 @@
     const URL_ELIMINAR = "/mysql/view_eliminarPlato.php";
     const URL_MODIFICAR = "/mysql/view_modificarPlato.php";
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         $(document).on(IntroduccionPlatos.READY_EVENT, function () {
             IntroduccionPlatos.fijarModo(IntroduccionPlatos.MODOS.MIS_PLATOS);
             $(".tablaMisPlatos #btnAgregar").click(function () {

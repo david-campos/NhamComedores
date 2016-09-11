@@ -9,10 +9,28 @@
       "src": "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"
     },
     {
+      "async": false,
+      "src": "/js/init.js"
+    },
+    {
       "src": "/js/browser_testing.js"
     },
     {
       "src": "/js/modal_generico.js"
+    }
+  ],
+  "/misplatos/": [
+    {
+      "src": "/js/mis-platos.js"
+    }
+  ],
+  "/login/": [
+    {
+      "async": false,
+      "src": "/js/sha512.js"
+    },
+    {
+      "src": "/js/login.js"
     }
   ],
   "/panel/": [
@@ -22,6 +40,14 @@
     },
     {
       "src": "/js/panel.js"
+    }
+  ],
+  "/calendario/": [
+    {
+      "src": "/js/calendario.js"
+    },
+    {
+      "src": "/js/calendario_acciones.js"
     }
   ]
 }
