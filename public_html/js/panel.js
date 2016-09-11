@@ -8,13 +8,14 @@ var divPlatos = null;
 var divMenus = null;
 var platosEliminados = {};
 var platosAgotados = [];
+var menuEnEliminacion = null;
 
 $(document).ready(function(){
     divPlatos = $("#platos");
     divMenus = $("#menus");
 
     if (divPlatos.length != 1 || divMenus.length != 1) {
-        alert("No se ha encontrado el div de platos o el div de menús, se requiren ambos.");
+        if (console && console.log) console.log("No se ha encontrado el div de platos o el div de menús, se requiren ambos.");
         return;
     }
 
@@ -44,6 +45,8 @@ $(document).ready(function(){
         }
     });
 
+    divMenus.find("a.borrar").click(handleRemMenu);
+
     // Los platos se pueden deslizar para eliminar, y clickear en agotar, desagotar o eliminar
     divPlatos.find("li.eliminable").each(function () {
         hacerDeslizable($(this));
@@ -72,7 +75,158 @@ $(document).ready(function(){
     modE.find("#horario").mask("99:99 - 99:99");
     modE.find("input[id],textarea[id],div[data-tooltip]").tooltip();
     modE.find("#btnEditInfoSave").click(handleSaveClick);
+
+    $("#menAddLink").leanModal();
+    $("#selAddElementos").change(handleAddElementosChange);
+    $("#modNewMenuSave").click(handleGuardarMenu);
+    $(".chipsElementos").on("chip.delete", handleRemElementos);
+
+    $("#nmName,#nmPrecio").focus(function () {
+        $("#modNewMenu").find(".error").empty();
+        $(this).css("background-color", "");
+    });
+
+    // Cuando esté listo el modal de introducción de platos
+    $(document).on(IntroduccionPlatos.READY_EVENT, function () {
+        IntroduccionPlatos.platoIntroducido(function () {
+            setTimeout(function () {
+                window.location.reload();
+                history.go(0);
+            }, 500);
+        });
+        IntroduccionPlatos.fijarModo(IntroduccionPlatos.MODOS.CALENDARIO);
+    });
 });
+
+/**
+ * Maneja los click sobre los botones de eliminación de menús
+ */
+function handleRemMenu() {
+    if (menuEnEliminacion === null) {
+        menuEnEliminacion = $(this).closest("tr");
+        var id = menuEnEliminacion.attr("data-id");
+        $.post(
+            "/mysql/view_eliminarMenu.php",
+            {'idMenu': id},
+            menuEliminado,
+            "json"
+        ).fail(menuEliminado.bind(null, {status: "ERROR", error: "Error desconocido"}));
+        menuEnEliminacion.find("a").hide();
+        menuEnEliminacion.prepend(
+            $("<i></i>")
+                .addClass("material-icons light-green-text esperando")
+                .text("hourglass_full")
+        );
+    } else
+        alert("Espere a que se elimine el menú que se está eliminando.");
+}
+
+/**
+ * Maneja la respuesta de AJAX de view_eliminarMenu.php
+ * @param data {{}|{status:String,respuesta:{}}|{status:String,error:String,respuesta:{}}} la información devuelva por eliminarMenu
+ */
+function menuEliminado(data) {
+    if (data.status) {
+        switch (data.status) {
+            case "OK":
+                menuEnEliminacion.remove();
+                if (divMenus.find("table tr").length == 0) {
+                    divMenus.find("table").append(
+                        $("<tr></tr>").append(
+                            $("<td></td>").append(
+                                $("<i></i>")
+                                    .addClass("material-icons red-text left")
+                                    .text("warning")
+                            ).append("No se ha configurado ningún menú. Debería comenzar a configurar sus menús pronto.")
+                        )
+                    );
+                }
+                menuEnEliminacion = null;
+                break;
+            case "ERROR":
+                menuEnEliminacion.find("i.esperando").remove();
+                menuEnEliminacion.find("a").show();
+                menuEnEliminacion = null;
+                alert('(' + data.respuesta + ')' + " Ha habido algún error eliminando el menú: " + data.error);
+                break;
+        }
+    } else {
+        if (console && console.log)
+            console.log("Data no contiene status");
+        setTimeout(location.reload, 500);
+    }
+}
+
+/**
+ * Maneja el cambio de valor en el select de añadir elementos
+ */
+function handleAddElementosChange() {
+    var selected = $(this).val();
+    var chip = $("<div></div>")
+        .addClass("chip")
+        .attr("data-id", selected)
+        .append(
+            $("<span></span>")
+                .text($(this).find("option[value='" + selected + "']").text())
+        );
+    chip.append(
+        $("<i></i>")
+            .addClass("close material-icons")
+            .on('click', function () {
+                $(this).parent().trigger('chip.delete', [chip]);
+            })
+            .text("close")
+    );
+    $(".chipsElementos").append(chip);
+    $(this).find("option[value='" + selected + "']").attr("disabled", "");
+    $(this).val("0");
+    $(this).material_select();
+
+    $("#modNewMenu").find(".error").empty();
+}
+
+/**
+ * Maneja la eliminación de un elemento en el modal de añadir menú
+ */
+function handleRemElementos(e, chip) {
+    $("#selAddElementos").find("option[value='" + chip.attr("data-id") + "']").removeAttr("disabled")
+        .end().material_select();
+}
+
+function handleGuardarMenu() {
+    var form = $("#modNewMenu").find("form");
+    var iptName = $("#nmName");
+    var iptPrecio = $("#nmPrecio");
+    var elementos = [];
+    form.find(".chip").each(function () {
+        elementos.push($(this).attr('data-id'));
+    });
+
+    var valido = true;
+    form.find(".error").empty();
+    if (elementos.length === 0) {
+        form.find(".error").append("<p>Debe introducir algún elemento</p>");
+        valido = false;
+    }
+    if (!iptName.val()) {
+        form.find(".error").append("<p>Debe indicar un nombre para el menú</p>");
+        iptName.css("background-color", "#ef9a9a");
+        valido = false;
+    }
+    if (!iptPrecio.val()) {
+        form.find(".error").append("<p>Por favor, indique un precio.</p>");
+        iptPrecio.css("background-color", "#ef9a9a");
+        valido = false;
+    }
+    if (!valido) return;
+    form.append(
+        $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "elementos")
+            .val(JSON.stringify(elementos))
+    );
+    form.submit();
+}
 
 /**
  * Maneja el click sobre el boton de guardar del modal de editar la información del comedor

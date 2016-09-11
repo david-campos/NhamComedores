@@ -506,41 +506,43 @@ $(document).ready(function() {
 	$('select').material_select(); // Selects de materializecss
 
 	// La introducción de un plato llevará a esto
-	IntroduccionPlatos.platoIntroducido(platoIntroducido);
+    $(document).on(IntroduccionPlatos.READY_EVENT, function () {
+        IntroduccionPlatos.platoIntroducido(platoIntroducido);
 
-	// Descargamos dias con platos y mostramos
-	$.get(
-		API_URL,
-		{tipo: 5, id: COMEDOR._id, month: mes.getMonth()+1, year: mes.getFullYear()},
-		function(data) {
-			// Hay que coger hasta <!--FIN--> por la propaganda, cuando tengamos
-			// server propio ya no hará falta.
-			var info = data.substring(0,data.indexOf("<!--FIN-->"));
-			var json = JSON.parse(info);
-			if( json['status'] == 'OK' ) {
-				cache.setDias(mes, json['respuesta']);
-				redibujar();
-	
-				siguienteAnteriorEnabled(true);
-				
-				// Hemos cargado!
-				$("div#rCargando").hide();
-				$("div#rCalendario").show();
-	
-				// Precarga el mes siguiente
-				var smes = mes.getMonth() + 1;
-				var syear = mes.getFullYear();
-				if(smes == 12) {
-					syear += 1;
-					smes = 0;
+        // Descargamos dias con platos y mostramos
+        $.get(
+            API_URL,
+            {tipo: 5, id: COMEDOR._id, month: mes.getMonth() + 1, year: mes.getFullYear()},
+            function (data) {
+                // Hay que coger hasta <!--FIN--> por la propaganda, cuando tengamos
+                // server propio ya no hará falta.
+                var info = data.substring(0, data.indexOf("<!--FIN-->"));
+                var json = JSON.parse(info);
+                if (json['status'] == 'OK') {
+                    cache.setDias(mes, json['respuesta']);
+                    redibujar();
+
+                    siguienteAnteriorEnabled(true);
+
+                    // Hemos cargado!
+                    $("div#rCargando").hide();
+                    $("div#rCalendario").show();
+
+                    // Precarga el mes siguiente
+                    var smes = mes.getMonth() + 1;
+                    var syear = mes.getFullYear();
+                    if (smes == 12) {
+                        syear += 1;
+                        smes = 0;
+                    }
+
+                    precargarMes(new Date(syear, smes));
+                } else {
+                    alert("Ha habido un error."); // TODO: cambiar alert por algo con más estilo
+                    console.log(json);
 				}
-	
-				precargarMes(new Date(syear, smes));
-			} else {
-				alert("Ha habido un error."); // TODO: cambiar alert por algo con más estilo
-				console.log(json);
-			}
-		}, "text");
+            }, "text");
+    });
 });
 // -- Fin de la inicialización
 

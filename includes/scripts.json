@@ -10,12 +10,18 @@
     },
     {
       "src": "/js/browser_testing.js"
+    },
+    {
+      "src": "/js/modal_generico.js"
     }
   ],
   "/panel/": [
     {
       "async": false,
       "src": "/js/jquery.maskedinput.min.js"
+    },
+    {
+      "src": "/js/panel.js"
     }
   ]
 }

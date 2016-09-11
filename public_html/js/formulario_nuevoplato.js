@@ -11,6 +11,12 @@
 // Declaracion de un "namespace" al estilo de Enterprise JQuery
 (function( IntroduccionPlatos, $, undefined ) {
 	/* Parte publica */
+    /**
+     * Evento lanzado sobre document cuando el modal está listo para empezar a usarse
+     * @type {string}
+     */
+    IntroduccionPlatos.READY_EVENT = 'introduccionplatos-ready';
+
 	/**
 	 * Abre el modal para introducir nuevo plato.
 	 *
@@ -121,6 +127,8 @@
         });
 		modal.find('select').material_select(); // Selects de materializecss
 		modal.find("form").submit(function(event){event.preventDefault();});
+
+        $(document).trigger(IntroduccionPlatos.READY_EVENT);
 	});
 
     var prepararModal = function(){

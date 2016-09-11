@@ -8,16 +8,28 @@
     const URL_MODIFICAR = "/mysql/view_modificarPlato.php";
 
     $(document).ready(function(){
-        IntroduccionPlatos.fijarModo(IntroduccionPlatos.MODOS.MIS_PLATOS);
-        $(".tablaMisPlatos #btnAgregar").click(function(){IntroduccionPlatos.abrir()});
-        $(".tablaMisPlatos a.borrarMiPlato").click(function(e){borrarPlato(e);});
-        $(".tablaMisPlatos tbody td").dblclick(function(e){editarPlato(e);});
-        $(document).keyup(function(event){
-            if(event.key == "Escape") { cancelarModificacionPlato(); }
-            if(event.key == "Enter") { guardarModificacionPlato(event); }
+        $(document).on(IntroduccionPlatos.READY_EVENT, function () {
+            IntroduccionPlatos.fijarModo(IntroduccionPlatos.MODOS.MIS_PLATOS);
+            $(".tablaMisPlatos #btnAgregar").click(function () {
+                IntroduccionPlatos.abrir()
+            });
+            $(".tablaMisPlatos a.borrarMiPlato").click(function (e) {
+                borrarPlato(e);
+            });
+            $(".tablaMisPlatos tbody td").dblclick(function (e) {
+                editarPlato(e);
+            });
+            $(document).keyup(function (event) {
+                if (event.key == "Escape") {
+                    cancelarModificacionPlato();
+                }
+                if (event.key == "Enter") {
+                    guardarModificacionPlato(event);
+                }
+            });
+            IntroduccionPlatos.alCerrar(platosInsertados);
+            IntroduccionPlatos.multiplato(true);
         });
-        IntroduccionPlatos.alCerrar(platosInsertados);
-        IntroduccionPlatos.multiplato(true);
     });
 
     /**
@@ -190,6 +202,7 @@
     /**
      * Pone el tr en edición, esto es: convierte sus td's en campos editables y pone un botón de guardar
      * @param tr {JQuery} tr a poner en edición
+     * @param tdFocused td que se ha seleccionado
      * @private
      */
     var _ponerTrEnEdicion = function(tr, tdFocused) {

@@ -9,6 +9,7 @@
  *
  * David Campos Rodríguez
  */
+require_once dirname(__FILE__) . "/../../includes/functions.php";
 ?>
 <!-- Modal de nuevo plato -->
 <div id="modNuevoPlato" class="modal modal-fixed-footer">
@@ -33,7 +34,7 @@
 					</div>
 				</div>
 				<div class="input-field col s3">
-					<select id="tipoNuevo">
+					<select title="Tipo del nuevo plato" id="tipoNuevo">
 						<option value="0" selected>Primero</option>
 						<option value="1">Segundo</option>
 						<option value="2">Postre</option>
@@ -58,4 +59,6 @@
 		<a id="nuevoPlatoAnhadir" class="waves-effect waves-light btn amber">Añadir</a>
 	</div>
 </div>
-<script language="JavaScript" src="/js/formulario_nuevoplato.js"></script>
+<?php
+script_include(array("src" => "/js/formulario_nuevoplato.js", "async" => false));
+?>

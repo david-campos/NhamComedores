@@ -10,10 +10,8 @@ require_once(dirname(__FILE__) . '/../../includes/functions.php');
 if (!login_check()) die("¡Eres un pequeño hackercillo! ¿O qué eres tú? Pillín... e.e");
 /* LA PAGINA REQUIERE ESTAR LOGEADO */
 
-// Utiliza el script manejoPlatosMenus
-simple_script_include("/js/panel.js");
-simple_script_include("/js/modal_generico.js");
-
+include dirname(__FILE__) . '/view_nuevoPlatoForm.php';
+include dirname(__FILE__) . '/panel_elements/view_modalNuevoMenu.php';
 ?>
 
 <div class="row">
@@ -30,3 +28,15 @@ simple_script_include("/js/modal_generico.js");
 </div>
 
 <?php include dirname(__FILE__) . '/panel_elements/view_comedorInfo.php'; ?>
+
+<div class="fixed-action-btn" style="bottom: 24px; right: 24px;">
+    <a class="btn-floating btn-large amber">
+        <i class="large material-icons">add</i>
+    </a>
+    <ul>
+        <li><a id="menAddLink" class="btn-floating blue-grey" title="Nuevo menú" href="#modNewMenu"><i
+                    class="material-icons">menu</i></a></li>
+        <li><a class="btn-floating red" onclick="IntroduccionPlatos.abrir();" title="Nuevo plato"><i
+                    class="material-icons">all_out</i></a></li>
+    </ul>
+</div>

@@ -338,6 +338,7 @@ div.valign.cargando{
  /* label focus color */
 input[type=password]:focus:not([readonly]) + label,
 input[type=text]:focus:not([readonly]) + label,
+input[type=number]:focus:not([readonly]) + label,
 input[type=tel]:focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
  color: #ffa000;
@@ -345,6 +346,7 @@ textarea.materialize-textarea:focus:not([readonly]) + label {
 /* label underline focus color */
 input[type=password]:focus:not([readonly]),
 input[type=text]:focus:not([readonly]),
+input[type=number]:focus:not([readonly]),
 input[type=tel]:focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]){
  border-bottom: 1px solid #ffa000;
