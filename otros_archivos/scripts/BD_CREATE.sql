@@ -75,6 +75,20 @@ CREATE TABLE `ElementosMenu` (
 )
 COMMENT "Elementos que conforman los menús ofrecidos en los comedores";
 
+/* Rellenamos los ElementosMenu con elementos disponibles para los comedores*/
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Primer plato','plato');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Segundo plato','plato');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Segundo plato (2)','plato');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Postre','plato');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Agua','bebida');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Refresco','bebida');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Cerveza','bebida');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Vino','bebida');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Combinado','bebida');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Pan','extra');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Café','extra');
+INSERT INTO `ElementosMenu`(`nombre`,`tipo`) VALUES('Chupito','extra');
+
 /* Table Tienen*/
 CREATE TABLE `Tienen` (
   `id_tipoMen` int(10) unsigned NOT NULL,
