@@ -20,6 +20,18 @@ define('FECHA_KEY', 'fecha');
 
 // Comprobamos si estás logeado
 if( login_check() ) {
+
+    // Comprobacion CSRF
+    if (seteada('auth_token')) {
+        $token = obtener('auth_token');
+        $comprobacion = comprobarFormToken('eliminar_plato', $token);
+        if (!$comprobacion) {
+            die(errorJson('Ataque CSRF detectado.'));
+        }
+    } else {
+        throw new Exception('Ataque CSRF detectado muy duramente.');
+    }
+
     if( seteada_y_numerica(ID_PLATO_KEY) ) {
         $id_plato = obtener(ID_PLATO_KEY, FILTER_SANITIZE_NUMBER_INT);
     } else {

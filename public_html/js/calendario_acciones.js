@@ -27,9 +27,10 @@
 		COLOR: 'light-green',
 		deshacer: function(onComplete, onFailure) {
 			var self = this;
+            var token = $("input[name=token_eliminar_plato]").val();
 			$.ajax({url:ELIMINAR_PLATO,
 				method: 'POST', async: false,
-				data: {'idPlato': this.idPlato, 'fecha': this.fecha, 'asoc': 'tener'},
+                data: {'idPlato': this.idPlato, 'fecha': this.fecha, 'asoc': 'tener', auth_token: token},
 				complete: function( data ) {
 					data = data.responseJSON;
 					if( data.status && data.status == "OK") {
@@ -44,9 +45,10 @@
 		},
 		rehacer: function(onComplete, onFailure) {
 			var self = this;
+            var token = $("#modNuevoPlato").find("input[name=auth_token]").val();
 			$.ajax({url:INSERTAR_PLATO,
 				method: 'POST', async: false,
-				data: {'idPlato': this.idPlato, 'fecha': this.fecha},
+                data: {'idPlato': this.idPlato, 'fecha': this.fecha, auth_token: token},
 				complete: function( data ) {
 					data = data.responseJSON;
 					if( data.status && data.status == "OK") {
@@ -76,9 +78,10 @@
 		COLOR: 'red',
 		deshacer: function(onComplete, onFailure) {
 			var self = this;
+            var token = $("#modNuevoPlato").find("input[name=auth_token]").val();
 			$.ajax({url:INSERTAR_PLATO,
 				method: 'POST', async: false,
-				data: {'idPlato': this.idPlato, 'fecha': this.fecha},
+                data: {'idPlato': this.idPlato, auth_token: token, 'fecha': this.fecha},
 				complete: function( data ) {
 					data = data.responseJSON;
 					if( data.status && data.status == "OK") {
@@ -93,9 +96,10 @@
 		},
 		rehacer: function(onComplete, onFailure) {
 			var self = this;
+            var token = $("input[name=token_eliminar_plato]").val();
 			$.ajax({url:ELIMINAR_PLATO,
 				method: 'POST', async: false,
-				data: {'idPlato': this.idPlato, 'fecha': this.fecha, 'asoc': 'tener'},
+                data: {'idPlato': this.idPlato, 'fecha': this.fecha, 'asoc': 'tener', auth_token: token},
 				complete: function( data ) {
 					data = data.responseJSON;
 					if( data.status && data.status == "OK") {

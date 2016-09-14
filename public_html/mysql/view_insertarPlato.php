@@ -38,6 +38,17 @@ if( login_check() ) {
 	$idComedor = $_SESSION['id_comedor'];
 	$plato = array();
 
+    // Comprobacion CSRF
+    if (seteada('auth_token')) {
+        $token = obtener('auth_token');
+        $comprobacion = comprobarFormToken('insertar_plato', $token);
+        if (!$comprobacion) {
+            die(errorJson('Ataque CSRF detectado.'));
+        }
+    } else {
+        throw new Exception('Ataque CSRF detectado muy duramente.');
+    }
+
 	// Agotado o fecha son opcionales, su valor por defecto es 'no' y 'hoy'
     if(seteada_y_numerica(SERVIR_KEY))
         $paraServir = obtener(SERVIR_KEY, FILTER_SANITIZE_NUMBER_INT);

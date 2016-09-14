@@ -39,9 +39,10 @@ require_once dirname(__FILE__) . '/../../../includes/model/ElementosMenu.php';
             <div class="row">
                 <div class="chipsElementos"></div>
             </div>
-            <div class="error">
+            <div class="error"></div>
 
-            </div>
+            <?php // Protección CSRF ?>
+            <input type="hidden" name="auth_token" value="<?= generarFormToken('nuevo_menu') ?>"/>
         </form>
     </div>
     <div class="modal-footer">

@@ -4,6 +4,8 @@
  * @author David Campos R.
  */
 
+require_once dirname(__FILE__) . '/../../../includes/functions.php';
+
 if (!isset($comedor)) {
     $fabrica = obtenerDAOFactory();
     $dao = $fabrica->obtenerComedoresDAO();
@@ -137,6 +139,10 @@ $dias_val = array("lunes", "martes", "miercoles", "jueves", "viernes", "sabado",
                 </div>*/ ?>
             </div>
             <span class="info">Los campos en blanco no se modificarán.</span>
+
+            <?php // Protección CSRF ?>
+            <input type="hidden" name="auth_token" value="<?= generarFormToken('editar_info') ?>"/>
+
         </form>
     </div>
     <div class="modal-footer">

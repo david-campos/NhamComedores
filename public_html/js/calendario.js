@@ -285,8 +285,10 @@ ModalPlatos.prototype = {
 		var paramFecha = dia.getFullYear().toString() + "-" + (dia.getMonth()+1).toString() +
 			"-" + dia.getDate().toString();
 
+        var token = $("input[name=token_eliminar_plato]").val();
+
 		$.post("/mysql/view_eliminarPlato.php",
-				{'idPlato': paramId, 'fecha': paramFecha, 'asoc': 'tener'},
+            {'idPlato': paramId, 'fecha': paramFecha, 'asoc': 'tener', auth_token: token},
 				function( data ) {
 					if( data.status == "OK") {
 						if($this.closest("ul").find("li").length == 1) {
@@ -446,7 +448,11 @@ ListaMisPlatos.prototype = {
         var fecha =  mes.getFullYear().toString() + "-" +
             (mes.getMonth() + 1).toString() + "-" +
             dia;
-        var parametros =  {'idPlato': id_plato, 'fecha': fecha, 'paraServir': 1};
+
+        // Cogemos el token del modal de nuevo plato
+        var token = $("#modNuevoPlato").find("input[name=auth_token]").val();
+
+        var parametros = {'idPlato': id_plato, 'fecha': fecha, 'paraServir': 1, auth_token: token};
         console.log(parametros);
         this.showLoad+=1;
         if(calendario) calendario.find("div.progress").show();

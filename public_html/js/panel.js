@@ -90,7 +90,7 @@ $(document).ready(function(){
     $(document).on(IntroduccionPlatos.READY_EVENT, function () {
         IntroduccionPlatos.platoIntroducido(function () {
             setTimeout(function () {
-                window.location.reload();
+                location.reload(true);
                 history.go(0);
             }, 500);
         });
@@ -105,9 +105,10 @@ function handleRemMenu() {
     if (menuEnEliminacion === null) {
         menuEnEliminacion = $(this).closest("tr");
         var id = menuEnEliminacion.attr("data-id");
+        var token = $("input[name=token_eliminar_menu]").val();
         $.post(
             "/mysql/view_eliminarMenu.php",
-            {'idMenu': id},
+            {'idMenu': id, auth_token: token},
             menuEliminado,
             "json"
         ).fail(menuEliminado.bind(null, {status: "ERROR", error: "Error desconocido"}));
@@ -153,7 +154,10 @@ function menuEliminado(data) {
     } else {
         if (console && console.log)
             console.log("Data no contiene status");
-        setTimeout(location.reload, 500);
+        setTimeout(function () {
+            location.reload(true);
+            history.go(0);
+        }, 500);
     }
 }
 
@@ -244,8 +248,9 @@ function handleSaveClick(e) {
 function agotarPlato(liPlato, valor) {
     var id = liPlato.attr('data-id');
     platosAgotados.push({id: id, li: liPlato});
+    var token = $("input[name=token_agotar_plato]").val();
     $.post("/mysql/view_agotarPlato.php",
-        {'idPlato': id, 'agotado': valor},
+        {'idPlato': id, 'agotado': valor, auth_token: token},
         platoAgotado,
         "json");
 }
@@ -307,18 +312,20 @@ function eliminarPlato(liPlato) {
     ModalGenerico.show(
         function (resp) {
             if (resp === RESP_ELIMINAR) {
-                    var paramId = liPlato.attr('data-id');
-                    var hoy = new Date();
-                    var paramFecha = hoy.getFullYear() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getDate();
+                var paramId = liPlato.attr('data-id');
+                var hoy = new Date();
+                var paramFecha = hoy.getFullYear() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getDate();
 
-                    platosEliminados[paramId] = liPlato;
+                platosEliminados[paramId] = liPlato;
 
-                    liPlato.addClass("amber");
+                liPlato.addClass("amber");
 
-                    $.post("/mysql/view_eliminarPlato.php",
-                        {'idPlato': paramId, 'fecha': paramFecha, 'asoc': 'tener'},
-                        platoEliminado,
-                        "json");
+                var token = $("input[name=token_eliminar_plato]").val();
+
+                $.post("/mysql/view_eliminarPlato.php",
+                    {'idPlato': paramId, 'fecha': paramFecha, 'asoc': 'tener', auth_token: token},
+                    platoEliminado,
+                    "json");
             }
         },
         "¿Realmente desea eliminar el plato '" + liPlato.find("h6").text() + "'?",

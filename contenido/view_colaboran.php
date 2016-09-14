@@ -10,7 +10,6 @@ $colaboradores = array(
 	array(
 		"nombre" => "David Campos Rodríguez",
 		"rol" => "Idea original y director del proyecto, desarrollo de gran parte de la web, API y app.",
-		"email" => "david.campos.r96@gmail.com",
 		"perfiles" => array(
 			"Linked-In" => "https://www.linkedin.com/in/david-campos-rodr%C3%ADguez-02240b112",
 			"GitHub" => "https://github.com/david-campos"),
@@ -18,7 +17,6 @@ $colaboradores = array(
 	array(
 		"nombre" => "María Luz Mosteiro",
 		"rol"=>"Colaboración en el desarrollo de la idea inicial y desarrollo de la interfaz original en la app para móvil.",
-		"email" => "mosteiro.marialuz@gmail.com",
 		"abandono"=>"27/07/2016",
 		"perfiles" => array(
 			"Linked-In" => "https://www.linkedin.com/in/marialuzmosteiro",

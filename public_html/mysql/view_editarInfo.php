@@ -13,6 +13,20 @@ require_once dirname(__FILE__) . '/../../includes/ImageReceiver.php';
 sec_session_start();
 
 try {
+    // Comprobacion CSRF
+    if (seteada('auth_token')) {
+        $token = obtener('auth_token');
+        // 30*60 = 30 minutos desde la carga de la página como máximo
+        $comprobacion = comprobarFormToken('editar_info', $token, 30 * 60);
+        if ($comprobacion === 0) {
+            throw new Exception('Tiempo de token del formulario expirado, inténtelo ahora de nuevo');
+        } else if (!$comprobacion) {
+            throw new Exception('Ataque CSRF detectado.');
+        }
+    } else {
+        throw new Exception('Ataque CSRF detectado muy duramente.');
+    }
+
     if (!seteada("name")) throw new Exception('No se indicó nombre.');
     $nombre = obtener("name");
     if (!seteada("direccion")) throw new Exception('No se indicó dirección.');

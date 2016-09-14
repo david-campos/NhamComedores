@@ -28,6 +28,17 @@ if( login_check() ) {
         "_id" => obtener(ID_PLATO_KEY, FILTER_SANITIZE_NUMBER_INT),
     );
 
+    // Comprobacion CSRF
+    if (seteada('auth_token')) {
+        $token = obtener('auth_token');
+        $comprobacion = comprobarFormToken('modificar_plato', $token);
+        if (!$comprobacion) {
+            die(errorJson('Ataque CSRF detectado.'));
+        }
+    } else {
+        throw new Exception('Ataque CSRF detectado muy duramente.');
+    }
+
     if(!($plato['nombre'] && $plato['descripcion'] && $plato['tipo'] && $plato['_id']))
         die(errorJson('Información de plato incompleta.'));
 

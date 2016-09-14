@@ -26,7 +26,7 @@ function sec_session_start() {
     
     if (ini_set('session.use_only_cookies', 1) === FALSE) {
         $error = urlencode("Error: No se pudo iniciar una sesión segura");
-        header("Location: ../public_html/?error=$error");
+        header("Location: /inicio/?error=$error");
         exit();
     }
     
@@ -213,6 +213,44 @@ function checkbrute($id_comedor, $mysqli) {
         }
     } else
         die("Error de preparacion de consulta bruteforce");
+}
+
+/**
+ * Genera un token seguro para un formulario, previene ataques CSRF
+ * @param $formId
+ * @return string
+ */
+function generarFormToken($formId) {
+    $nuevoToken = hash('sha512', uniqid(mt_rand(), true));
+    $token_time = time();
+    $_SESSION['csrf'][$formId . '_token'] = array('token' => $nuevoToken, 'time' => $token_time);
+    return $nuevoToken;
+}
+
+/**
+ * Comprueba el token seguro para un formulario, previene ataques CSRF
+ * @param $formId string id del formulario
+ * @param $tokenRecibido string token recibido
+ * @param int $margen_tiempo segundos de margen en que aun es valido el token
+ * @return bool|int false si no se acepta, true si se acepta, 0 si se sobrepasó el tiempo
+ */
+function comprobarFormToken($formId, $tokenRecibido, $margen_tiempo = 0) {
+    if (!isset($_SESSION['csrf'][$formId . '_token'])) {
+        return false;
+    }
+
+    if ($_SESSION['csrf'][$formId . '_token']['token'] !== $tokenRecibido) {
+        return false;
+    }
+
+    if ($margen_tiempo > 0) {
+        $token_age = time() - $_SESSION['csrf'][$formId . '_token']['time'];
+        if ($token_age >= $margen_tiempo) {
+            return 0;
+        }
+    }
+
+    return true;
 }
 
 /**

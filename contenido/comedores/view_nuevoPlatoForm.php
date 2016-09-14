@@ -52,6 +52,9 @@ require_once dirname(__FILE__) . "/../../includes/functions.php";
 				<p id="modalError" class="red lighten-4 red-text"></p>
 				<p id="modalExito" class="light-green lighten-4 light-green-text"></p>
 			</div>
+
+            <?php // Protección CSRF ?>
+            <input type="hidden" name="auth_token" value="<?= generarFormToken('insertar_plato') ?>"/>
 		</form>
 	</div>
 	<div class="modal-footer">

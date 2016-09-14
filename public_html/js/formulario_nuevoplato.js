@@ -180,6 +180,10 @@
 
 			parametros = {"nombre": nombre, "descripcion": descripcion, "tipo": tipo};
 		}
+
+        // Protección CSRF
+        parametros.auth_token = modal.find("form input[name=auth_token]").val();
+
 		parametros.paraServir = 0; // En modo MisPlatos, no son para servir
 
 		// En modo calendario, añadimos la fecha e indicamos que es para servir

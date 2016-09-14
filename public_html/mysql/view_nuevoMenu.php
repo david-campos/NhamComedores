@@ -15,6 +15,17 @@ sec_session_start();
 try {
     if (!login_check()) throw new Exception('No logeado');
 
+    // Comprobacion CSRF
+    if (seteada('auth_token')) {
+        $token = obtener('auth_token');
+        $comprobacion = comprobarFormToken('nuevo_menu', $token);
+        if (!$comprobacion) {
+            throw new Exception('Ataque CSRF detectado.');
+        }
+    } else {
+        throw new Exception('Ataque CSRF detectado muy duramente.');
+    }
+
     if (!(seteada("name") && seteada("precio") && seteada("elementos"))) {
         throw new Exception('Parámetros insuficientes');
     }

@@ -14,6 +14,11 @@ include dirname(__FILE__) . '/view_nuevoPlatoForm.php';
 include dirname(__FILE__) . '/panel_elements/view_modalNuevoMenu.php';
 ?>
 
+<?php // Protección CSRF ?>
+<input type="hidden" name="token_eliminar_menu" value="<?= generarFormToken('eliminar_menu') ?>"/>
+<input type="hidden" name="token_agotar_plato" value="<?= generarFormToken('agotar_plato') ?>"/>
+<input type="hidden" name="token_eliminar_plato" value="<?= generarFormToken('eliminar_plato') ?>"/>
+
 <div class="row">
     <ul class="tabs">
         <li class="tab col s6"><a href="#" class="active" id="platos_tab">Platos</a></li>

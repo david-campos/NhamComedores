@@ -15,6 +15,18 @@ define('ID_PLATO_KEY', 'idPlato');
 
 // Comprobamos si estás logeado
 if (!login_check()) die(errorJson('No logeado'));
+
+// Comprobacion CSRF
+if (seteada('auth_token')) {
+    $token = obtener('auth_token');
+    $comprobacion = comprobarFormToken('agotar_plato', $token);
+    if (!$comprobacion) {
+        die(errorJson('Ataque CSRF detectado.'));
+    }
+} else {
+    throw new Exception('Ataque CSRF detectado muy duramente.');
+}
+
 if (!(seteada_y_numerica(ID_PLATO_KEY) && seteada(AGOT_KEY)))
     die(errorJson('Parámetros insuficientes'));
 

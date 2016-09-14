@@ -11,6 +11,10 @@ if (login_check()) {
     require_once dirname(__FILE__) . "/../../includes/api-core.php";
     require_once dirname(__FILE__) . "/../../includes/model/MisPlatos.php";
     ?>
+
+    <?php // Protección CSRF ?>
+    <input type="hidden" name="token_eliminar_plato" value="<?= generarFormToken('eliminar_plato') ?>"/>
+
     <!-- Modal de listar platos -->
     <div id="modPlatos" class="modal modal-fixed-footer">
         <div class="modal-content">

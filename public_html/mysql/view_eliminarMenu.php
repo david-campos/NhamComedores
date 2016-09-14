@@ -22,6 +22,18 @@ $mysqli->autocommit(false);
 $mysqli->query("BEGIN TRANSACTION;");
 try {
     if (!login_check()) throw new Exception('No logeado');
+
+    // Comprobacion CSRF
+    if (seteada('auth_token')) {
+        $token = obtener('auth_token');
+        $comprobacion = comprobarFormToken('eliminar_menu', $token);
+        if (!$comprobacion) {
+            throw new Exception('Ataque CSRF detectado.');
+        }
+    } else {
+        throw new Exception('Ataque CSRF detectado muy duramente.');
+    }
+
     if (!$idMenu)
         throw new Exception('Id del menú no válido o no indicado.');
 

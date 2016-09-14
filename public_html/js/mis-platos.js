@@ -7,29 +7,27 @@
     const URL_ELIMINAR = "/mysql/view_eliminarPlato.php";
     const URL_MODIFICAR = "/mysql/view_modificarPlato.php";
 
-    $(document).ready(function () {
-        $(document).on(IntroduccionPlatos.READY_EVENT, function () {
-            IntroduccionPlatos.fijarModo(IntroduccionPlatos.MODOS.MIS_PLATOS);
-            $(".tablaMisPlatos #btnAgregar").click(function () {
-                IntroduccionPlatos.abrir()
-            });
-            $(".tablaMisPlatos a.borrarMiPlato").click(function (e) {
-                borrarPlato(e);
-            });
-            $(".tablaMisPlatos tbody td").dblclick(function (e) {
-                editarPlato(e);
-            });
-            $(document).keyup(function (event) {
-                if (event.key == "Escape") {
-                    cancelarModificacionPlato();
-                }
-                if (event.key == "Enter") {
-                    guardarModificacionPlato(event);
-                }
-            });
-            IntroduccionPlatos.alCerrar(platosInsertados);
-            IntroduccionPlatos.multiplato(true);
+    $(document).on(Init.PP_READY_EVENT, function () {
+        IntroduccionPlatos.fijarModo(IntroduccionPlatos.MODOS.MIS_PLATOS);
+        $(".tablaMisPlatos #btnAgregar").click(function () {
+            IntroduccionPlatos.abrir()
         });
+        $(".tablaMisPlatos a.borrarMiPlato").click(function (e) {
+            borrarPlato(e);
+        });
+        $(".tablaMisPlatos tbody td").dblclick(function (e) {
+            editarPlato(e);
+        });
+        $(document).keyup(function (event) {
+            if (event.key == "Escape") {
+                cancelarModificacionPlato();
+            }
+            if (event.key == "Enter") {
+                guardarModificacionPlato(event);
+            }
+        });
+        IntroduccionPlatos.alCerrar(platosInsertados);
+        IntroduccionPlatos.multiplato(true);
     });
 
     /**
@@ -49,7 +47,10 @@
     var platosInsertados = function(){
         // Recargamos, pues la lista es algo compleja y se genera por php,
         // si tengo más tiempo después podría pasar esto y lo demás a AJAX
-        location.reload();
+        setTimeout(function () {
+            location.reload(true);
+            history.go(0);
+        }, 500);
     };
 
     /**
@@ -61,8 +62,9 @@
 
         var tr = $(event.currentTarget).closest("tr");
         var id_plato = tr.attr("idPlato");
+        var token = $("input[name=token_eliminar_plato]").val();
         $.post(URL_ELIMINAR,
-            {'idPlato': id_plato, 'asoc': 'MisPlatos'},
+            {'idPlato': id_plato, 'asoc': 'MisPlatos', auth_token: token},
             function(data){
                 if(data.status) {
                     if(data.status == "OK") {
@@ -119,6 +121,7 @@
             }
         }
         platoEditado.tipo += "desc";
+        platoEditado.auth_token = $("input[name=token_modificar_plato]").val();
         $.post(URL_MODIFICAR,
             platoEditado,
             platoGuardado,

@@ -17,6 +17,11 @@ $page = obtener(PAGINADO_KEY, FILTER_SANITIZE_NUMBER_INT) or $page = 0;
 if( login_check() ) {
 	include_once dirname(__FILE__)."/view_nuevoPlatoForm.php";
     ?>
+
+    <?php // Protección CSRF ?>
+    <input type="hidden" name="token_eliminar_plato" value="<?= generarFormToken('eliminar_plato') ?>"/>
+    <input type="hidden" name="token_modificar_plato" value="<?= generarFormToken('modificar_plato') ?>"/>
+
     <div class="row">
         <table class="striped tablaMisPlatos">
             <thead><tr>
