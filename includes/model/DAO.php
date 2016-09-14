@@ -41,7 +41,15 @@ interface IComedoresDAO
     public function obtenerComedorTO($id);
 
     /**
+     * Obtiene todos los comedores de la base de datos
+     * @return ComedorTO[] los comedores registrados en la base de datos
+     * @throws Exception si no se puede realizar
+     */
+    public function obtenerComedores();
+
+    /**
      * @param $to ComedorTO El TO con el que actualizar el comedor
+     * @throws Exception Si no se puede realizar la actualización
      */
     public function actualizarComedorTO($to);
 }

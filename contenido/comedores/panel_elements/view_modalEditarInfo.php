@@ -147,6 +147,6 @@ $dias_val = array("lunes", "martes", "miercoles", "jueves", "viernes", "sabado",
     </div>
     <div class="modal-footer">
         <a href="#" id="btnEditInfoSave" class="modal-action modal-close waves-effect waves-green btn-flat ">Guardar</a>
-        <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat ">Cencelar</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat ">Cancelar</a>
     </div>
 </div>

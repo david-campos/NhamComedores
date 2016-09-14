@@ -17,7 +17,19 @@ $tipoConsulta = isset($_GET['tipo'])?$_GET['tipo']:COMEDORES;
 $lineas = obtenerLineas($tipoConsulta,$_GET);
 
 //La imprimimos
-$json = json_encode($lineas);
+if ($tipoConsulta === COMEDORES) {
+    // Hay que hacer esta corrección temporal en comedores mientras
+    // no tenga una solución mejor.
+    $arraysito = array();
+    foreach ($lineas['respuesta'] as $comedor) {
+        $arraysito[] = $comedor->toArray();
+    }
+    $lineas['respuesta'] = $arraysito;
+    $json = json_encode($lineas);
+} else {
+    $json = json_encode($lineas);
+}
+
 if ($json === false ) {
 	// Evita el echo de una cadena vacía (que es inválido como JSON)
 	$json = json_encode( array("jsonError", json_last_error_msg()) );

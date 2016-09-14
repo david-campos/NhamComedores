@@ -123,6 +123,50 @@ class MysqliComedoresDAO extends MysqliDAO implements IComedoresDAO
             throw new Exception('ComedoresDAO->obtenerComedorTO:prepare: ' . $mysqli->error);
     }
 
+
+    /**
+     * Obtiene todos los comedores de la base de datos
+     * @return ComedorTO[] los comedores registrados en la base de datos
+     * @throws Exception si no se puede realizar
+     */
+    public function obtenerComedores() {
+        $mysqli = $this->getMysqli();
+        if ($stmt = $mysqli->prepare(
+            "SELECT _id, nombre, universidad, horaInicio, horaFin, coordLat, coordLon, telefono, nombreContacto,
+			direccion, hAperturaIni, hAperturaFin, diaInicioApertura, diaFinApertura, promocion, codigo, salt, loginName
+	        FROM Comedores"
+        )
+        ) {
+            $stmt->execute();
+            $stmt->bind_result($id, $nombre, $universidad, $horaInicio, $horaFin, $coordLat,
+                $coordLon, $telefono, $nombreContacto, $direccion, $hAperturaIni,
+                $hAperturaFin, $diaInicioApertura, $diaFinApertura, $promocion, $codigo, $sal, $login);
+            $comedores = array();
+            while ($stmt->fetch()) {
+                $comedores[] = new ComedorTO(
+                    $id,
+                    $universidad,
+                    $nombre,
+                    array($horaInicio, $horaFin),
+                    array($coordLat, $coordLon),
+                    $telefono,
+                    $nombreContacto,
+                    $direccion,
+                    array(
+                        "dias" => array($diaInicioApertura, $diaFinApertura),
+                        "horas" => array($hAperturaIni, $hAperturaFin)),
+                    $promocion,
+                    $codigo,
+                    $sal,
+                    $login
+                );
+            }
+            $stmt->close();
+            return $comedores;
+        } else
+            throw new Exception('ComedoresDAO->obtenerComedorTO:prepare: ' . $mysqli->error);
+    }
+
     /**
      * @param $to ComedorTO El TO con el que actualizar el comedor
      * @throws Exception Si no se puede realizar la actualización

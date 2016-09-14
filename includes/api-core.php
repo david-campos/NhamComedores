@@ -7,6 +7,8 @@
  */
 
 require_once(dirname(__FILE__) . '/db_connect.php');
+require_once(dirname(__FILE__) . '/model/DAO.php');
+require_once(dirname(__FILE__) . '/model/ComedorTO.php');
 
 /* CONSTANTES */
 
@@ -263,21 +265,13 @@ function obtenerLineas($tipoConsulta,$valores) {
 		}
 		break;
 	case COMEDORES:
-		$stmt = $mysqli->prepare(CONSULTA_COMEDORES); // por defecto, comedores
-		$stmt->execute();
-		$stmt->bind_result($id, $nombre, $horaInicio, $horaFin, $coordLat,
-			$coordLon, $telefono, $nombreContacto, $direccion, $hAperturaIni,
-			$hAperturaFin, $diaInicioApertura, $diaFinApertura, $promocion);
-		while( $stmt->fetch() ) {
-			$lineas['respuesta'][] = array('_id'=>$id, 'nombre'=>$nombre, 'horaInicio'=>$horaInicio,
-				'horaFin'=>$horaFin, 'coordLat'=>$coordLat, 'coordLon'=>$coordLon,
-				'telefono'=>$telefono, 'nombreContacto'=>$nombreContacto,
-				'direccion'=>$direccion, 'hAperturaIni'=>$hAperturaIni,
-				'hAperturaFin'=>$hAperturaFin, 'diaInicioApertura'=>$diaInicioApertura,
-				'diaFinApertura'=>$diaFinApertura, 'promocion'=>$promocion);
-		}
-		$stmt->close();
-		break;
+        // Usamos AF+DAO TODO: hacerlo en todo el archivo
+        $fabrica = obtenerDAOFactory();
+        $dao = $fabrica->obtenerComedoresDAO();
+        $lineas['respuesta'] = $dao->obtenerComedores();
+        unset($fabrica);
+        unset($dao);
+        break;
 	default:
 		$lineas['status'] = 'ERROR';
 		$lineas['error'] = 'No existe la consulta '.$tipoConsulta;

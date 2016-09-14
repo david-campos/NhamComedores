@@ -46,6 +46,16 @@ class ComedorTO
 
     // PARTE ESTÁTICA
     /**
+     * Convierte un número que represente un día de la semana a la numeración
+     * que emplea la web para días de la semana
+     * @param $dia int dia en numeración standard (de PHP, 0=domingo-6=sabado)
+     * @return int dia en la numeración de la web (0=lunes-6=domingo)
+     */
+    public static function sEnMiNumeracion($dia) {
+        return ($dia + 6) % 7;
+    }
+
+    /**
      * Convierte el día de la semana devuelto por la API a su número.
      *
      * Convierte una cadena de carácteres válida al número de día de la semana
@@ -112,6 +122,29 @@ class ComedorTO
     }
 
     /**
+     * Comprueba si una hora se encuentra entre otras dos dadas
+     * @param $hora string hora a comparar en formato 'H:i:s'
+     * @param $inicio string hora de inicio en formato 'H:i:s'
+     * @param $fin string hora de fin en formato 'H:i:s'
+     * @return bool
+     */
+    public static function sHoraEnPlazo($hora, $inicio, $fin) {
+        $strpos = strpos($hora, ':');
+        $h = intval(substr($hora, 0, $strpos));
+        $m = intval(substr($hora, $strpos, strrpos($hora, ':')));
+
+        $strpos = strpos($inicio, ':');
+        $inicio_h = intval(substr($inicio, 0, $strpos));
+        $inicio_m = intval(substr($inicio, $strpos, strrpos($inicio, ':')));
+
+        $strpos = strpos($fin, ':');
+        $fin_h = intval(substr($fin, 0, $strpos));
+        $fin_m = intval(substr($fin, $strpos, strrpos($fin, ':')));
+
+        return ($inicio_m * 60 + $inicio_h) <= ($m * 60 + $h) && ($m * 60 + $h) <= ($fin_m * 60 + $fin_h);
+    }
+
+    /**
      * Formatea la hora, retirando los segundos.
      *
      * @param string $hora La hora en formato 'hh:mm:ss'
@@ -122,6 +155,19 @@ class ComedorTO
     }
 
     // PARTE PÚBLICA
+    /**
+     * Indica si el comedor se encuentra en horario de comedor actualmente
+     */
+    public function enHorarioDeComedor() {
+        $apertura = $this->getApertura();
+        $horario = $this->getHorarioComedor();
+        $diaEnPlazo = ComedorTO::sEnPlazo(
+            ComedorTO::sEnMiNumeracion(date('w')), $apertura['dias'][0], $apertura['dias'][1]);
+        $horaEnPlazo = ComedorTO::sHoraEnPlazo(date('H:i:s'), $horario[0], $horario[1]);
+
+        return $diaEnPlazo && $horaEnPlazo;
+    }
+
     /**
      * Obtiene la apertura del comedor en HTML en un formato legible para cualquiera
      * @return string El html que explica la apertura
@@ -141,11 +187,37 @@ class ComedorTO
     }
 
     /**
+     * Comprueba si el comedor dispone de imagen
+     * @return bool TRUE si tiene miniatura, FALSE si no
+     */
+    public function tieneImagen() {
+        return file_exists(dirname(__FILE__) .
+            '/../../public_html/api/imagenes/detail_' . $this->getId() . '.png');
+    }
+
+    /**
      * Obtiene la url de la imagen del comedor
      * @return string La url para obtener la imagen del comedor
      */
     public function getImagen() {
         return "/api/imagenes/$this->_id/";
+    }
+
+    /**
+     * Comprueba si el comedor dispone de miniatura
+     * @return bool TRUE si tiene miniatura, FALSE si no
+     */
+    public function tieneMiniatura() {
+        return file_exists(dirname(__FILE__) .
+            '/../../public_html/api/miniaturas/mini_' . $this->getId() . '.png');
+    }
+
+    /**
+     * Obtiene la url de la miniatura del comedor
+     * @return string La url para obtener la miniatura del comedor
+     */
+    public function getMiniatura() {
+        return "/api/miniaturas/$this->_id/";
     }
 
     /**
