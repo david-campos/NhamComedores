@@ -472,7 +472,7 @@ ListaMisPlatos.prototype = {
         }
 
         if( data.status ) {
-            if(data.status == "OK") {
+            if (data.status === "OK") {
                 data = data.respuesta;
 
                 // Añadimos dia a la cache
@@ -490,8 +490,15 @@ ListaMisPlatos.prototype = {
                     });
                 acciones.nuevaAccion(accion);
             } else {
-                alert("Ha habido algun error... Recarga para obtener información real sobre los platos de cada día.");
-                console.log(data);
+                if (data.error === "Repetido") {
+                    ModalGenerico.show(null,
+                        "<span class='error'>Error al insertar: Ya se sirve el plato en ese día.</span>",
+                        "Plato repetido",
+                        [{text: "Aceptar"}]);
+                } else {
+                    alert("Ha habido algun error... Recarga para obtener información real sobre los platos de cada día.");
+                    console.log(data);
+                }
             }
         } else {
             if(console) console.log("Data no contiene status.");
