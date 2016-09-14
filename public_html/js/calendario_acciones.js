@@ -258,4 +258,7 @@
 			if(this.manejador.puedoRehacer()) { r.show(); } // Mostramos redo
 		}
 	};
+
+	// listo!
+	$(document).trigger(Init.HST_READY_EVENT);
 }( window.Historial = window.Historial || {}, jQuery )); // Fin del "namespace"

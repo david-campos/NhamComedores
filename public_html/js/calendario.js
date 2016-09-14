@@ -18,7 +18,8 @@ var COMEDOR = null;
 var MIS_PLATOS = null;
 
 $(document).on('quizas-listo', function () {
-    if (comedor_listo && mis_platos_listo && document_ready && Init.ready_scripts.IntroduccionPlatos)
+    if (comedor_listo && mis_platos_listo && document_ready && Init.ready_scripts.IntroduccionPlatos
+        && Init.ready_scripts.Historial)
         $(document).trigger("iniciar-calendario");
 });
 
